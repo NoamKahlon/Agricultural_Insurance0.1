@@ -19,50 +19,37 @@
   </properties>
 
   <dependencies>
-    <!-- JUnit 5 Jupiter API -->
+    <!-- TestNG -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.1</version>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>7.9.0</version>
       <scope>test</scope>
     </dependency>
-    <!-- JUnit 5 Jupiter Engine (needed for running tests) -->
+    
+    <!-- Allure TestNG integration -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.1</version>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-testng</artifactId>
+      <version>2.29.1</version>
       <scope>test</scope>
     </dependency>
-    <!-- JUnit 5 Platform Launcher (optional, for compatibility with older versions) -->
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-launcher</artifactId>
-      <version>1.7.1</version>
-      <scope>test</scope>
-    </dependency>
-<!--    &lt;!&ndash; ✅ JUnit 4 (NOT JUnit 5) &ndash;&gt;-->
-<!--    <dependency>-->
-<!--      <groupId>junit</groupId>-->
-<!--      <artifactId>junit</artifactId>-->
-<!--      <version>4.13.2</version>-->
-<!--      <scope>test</scope>-->
-<!--    </dependency>-->
 
-    <!-- ✅ Selenium WebDriver -->
+    <!-- Selenium WebDriver -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>4.28.1</version>
     </dependency>
 
-    <!-- ✅ WebDriverManager -->
+    <!-- WebDriverManager -->
     <dependency>
       <groupId>io.github.bonigarcia</groupId>
       <artifactId>webdrivermanager</artifactId>
       <version>5.7.0</version>
     </dependency>
 
-    <!-- ✅ Allure JUnit 4 Integration -->
+    <!-- Allure JUnit 4 integration -->
     <dependency>
       <groupId>io.qameta.allure</groupId>
       <artifactId>allure-junit4</artifactId>
@@ -70,38 +57,39 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- ✅ AspectJ for Allure @Step and annotations -->
+
+
+    <!-- Commons IO -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.18.0</version>
+    </dependency>
+
+    <!-- For excecute  @Step -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>1.9.21</version>
     </dependency>
 
-    <!-- ✅ Needed for Allure step annotations with JUnit 4 -->
     <dependency>
       <groupId>io.qameta.allure</groupId>
       <artifactId>allure-junit4-aspect</artifactId>
       <version>2.29.1</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Optional: Commons IO for file handling -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.18.0</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.junit.jupiter</groupId>-->
+<!--      <artifactId>junit-jupiter</artifactId>-->
+<!--      <version>RELEASE</version>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
   </dependencies>
 
   <build>
     <plugins>
-      <!-- ✅ Compiler plugin -->
+      <!-- Maven Compiler -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -112,7 +100,7 @@
         </configuration>
       </plugin>
 
-      <!-- ✅ Surefire with Allure JUnit4 listener -->
+      <!-- Maven Surefire Plugin + Allure Listener -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -130,7 +118,7 @@
         </configuration>
       </plugin>
 
-      <!-- ✅ Allure Report Plugin -->
+      <!-- Allure Plugin -->
       <plugin>
         <groupId>io.qameta.allure</groupId>
         <artifactId>allure-maven</artifactId>
@@ -138,4 +126,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

@@ -1,26 +1,34 @@
-import io.qameta.allure.Allure;
-import io.qameta.allure.model.Status;
-import org.junit.Assert;
+
 import org.junit.Test;
-import org.junit.internal.runners.statements.Fail;
-import org.xml.sax.SAXException;
+import org.junit.Before;
+import org.junit.After;
+import org.testng.Assert;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 
-public class Test1 {
+public class Test1 extends Base {
 
-   @org.junit.Test
-    //@org.junit.Description("Verify that the 'new student page' title matches the expected value")
-    public void test01_New_StudentPage_Title() throws ParserConfigurationException, IOException, SAXException {
+
+
+    @Test
+    void test01_New_StudentPage_Title() {
+        testPage.openUrl();
+        String actualTitle = getTitleWithStep();
         try {
-            Assert.assertEquals("title2", "title2"); // Using JUnit 4's Assert
-            Allure.step("Test passed");
-            System.out.println(" -- Test Passed");
+            Assert.assertEquals("Google", actualTitle);
         } catch (AssertionError error) {
-            Allure.step("Test failed: " + error.getMessage(), Status.FAILED);
-            System.out.println(" -- Test Failed");
-            Assert.fail(); // Using JUnit 4's fail
+            failedStep(error);
+            Assert.fail(error);
         }
     }
+
+    @Step("Getting the title from the page")
+    public String getTitleWithStep() {
+        return testPage.getTitle();
+    }
+
+    @Step("Test failed: {error}")
+    public void failedStep(Throwable error) {
+        // logging failure
+    }
+
 }
