@@ -38,11 +38,11 @@ public class DocumentsAndForms {
     }
 
     public void clickSearch() {
-        basePage.Click(searchButton);
+        basePage.click(searchButton);
     }
 
     public void clickClear() {
-        basePage.Click(resetButtonLoc);
+        basePage.click(resetButtonLoc);
     }
 
     public List<WebElement> getVisibleSearchResultRows() {

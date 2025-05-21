@@ -16,9 +16,9 @@ public class ContactUsTests extends Base {
             basePage.openMainPage();
             String actualTitle = contactUsPage.getTitle();
             String expectedTitle = "ביטוח חקלאי - חברת הביטוח למגזר הקיבוצי והפרטי";
-            assertTextEquals(actualTitle, expectedTitle, "Check main page title");
+            smartLog("Check main page title", "Homepage Title", actualTitle.equals(expectedTitle), LogMode.HARD);
         } catch (Exception e) {
-            smartLog("❌ Failed to load homepage or verify title: " + e.getMessage(), "Homepage Title", false);
+            smartLog("❌ Failed to load homepage or verify title: " + e.getMessage(), "Homepage Title", false, LogMode.HARD);
             throw e;
         }
     }
@@ -27,18 +27,18 @@ public class ContactUsTests extends Base {
     @Description("Checks that the Contact Us page is accessible and the form is visible")
     public void testContactUsPageIsDisplayed() {
         basePage.openMainPage();
-        logStep("✅ Opened main page", "Main Page", true);
+        smartLog("✅ Opened main page", "Main Page", true, LogMode.SOFT);
 
         contactUsPage.clickOnContactUs();
-        logStep("✅ Clicked on Contact Us", "Click Contact Us", true);
+        smartLog("✅ Clicked on Contact Us", "Click Contact Us", true, LogMode.SOFT);
 
-        logStep(basePage.isDisplayedSafe(contactUsPage.fullNameField) ? "✅ Full Name field is displayed" : "❌ Full Name field is NOT displayed", "Full Name Field", basePage.isDisplayedSafe(contactUsPage.fullNameField));
-        logStep(basePage.isDisplayedSafe(contactUsPage.phoneField) ? "✅ Phone field is displayed" : "❌ Phone field is NOT displayed", "Phone Field", basePage.isDisplayedSafe(contactUsPage.phoneField));
-        logStep(basePage.isDisplayedSafe(contactUsPage.emailField) ? "✅ Email field is displayed" : "❌ Email field is NOT displayed", "Email Field", basePage.isDisplayedSafe(contactUsPage.emailField));
-        logStep(basePage.isDisplayedSafe(contactUsPage.subjectField) ? "✅ Subject field is displayed" : "❌ Subject field is NOT displayed", "Subject Field", basePage.isDisplayedSafe(contactUsPage.subjectField));
-        logStep(basePage.isDisplayedSafe(contactUsPage.messageField) ? "✅ Message field is displayed" : "❌ Message field is NOT displayed", "Message Field", basePage.isDisplayedSafe(contactUsPage.messageField));
+        smartLog(basePage.isDisplayedSafe(contactUsPage.fullNameField) ? "✅ Full Name field is displayed" : "❌ Full Name field is NOT displayed", "Full Name Field", basePage.isDisplayedSafe(contactUsPage.fullNameField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.phoneField) ? "✅ Phone field is displayed" : "❌ Phone field is NOT displayed", "Phone Field", basePage.isDisplayedSafe(contactUsPage.phoneField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.emailField) ? "✅ Email field is displayed" : "❌ Email field is NOT displayed", "Email Field", basePage.isDisplayedSafe(contactUsPage.emailField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.subjectField) ? "✅ Subject field is displayed" : "❌ Subject field is NOT displayed", "Subject Field", basePage.isDisplayedSafe(contactUsPage.subjectField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.messageField) ? "✅ Message field is displayed" : "❌ Message field is NOT displayed", "Message Field", basePage.isDisplayedSafe(contactUsPage.messageField), LogMode.SOFT);
 
-        assertAll();
+        assertAllSoft();
     }
 
     @Test(description = "Verify contact form validation when submitted empty")
@@ -47,56 +47,19 @@ public class ContactUsTests extends Base {
         SoftAssert softAssert = new SoftAssert();
 
         try {
-            basePage.openMainPage();
 
             contactUsPage.clickOnContactUs();
 
-//            Map<String, By> contactFormFields = new HashMap<>();
-//            contactFormFields.put("Full Name", contactUsPage.fullNameField);
-//            contactFormFields.put("Phone", contactUsPage.phoneField);
-//            contactFormFields.put("Email", contactUsPage.emailField);
-//            contactFormFields.put("Subject", contactUsPage.subjectField);
-//            contactFormFields.put("Message", contactUsPage.messageField);
-//
-//            List<String> missing = contactUsPage.getMissingElements(contactFormFields);
-//
-//            for (String field : contactFormFields.keySet()) {
-//                boolean found = !missing.contains(field);
-//                smartLog((found ? "✅" : "❌") + " " + field + " is " + (found ? "visible" : "missing"), field, found);
-//                softAssert.assertTrue(found, field + " is missing");
-//            }
-
             contactUsPage.pressSubmit();
-            smartLog("Submitted empty form", "Empty Submit", true);
+            smartLog("Submitted empty form", "Empty Submit", true, LogMode.SOFT);
 
             String expectedError = "חובה למלא שדה זה";
 
-
-            String fullNameText = basePage.getTextSafe(By.id("fullname"));
-            boolean isFullNameEmpty = fullNameText.trim().isEmpty();
-            logStep(isFullNameEmpty ? "✅ Full Name is empty (as expected)" : "❌ Full Name is not empty",
-                    "Full Name Content", isFullNameEmpty);
-
-            String phoneText = basePage.getTextSafe(By.id("phone"));
-            boolean isPhoneEmpty = phoneText.trim().isEmpty();
-            logStep(isPhoneEmpty ? "✅ Phone is empty (as expected)" : "❌ Phone is not empty",
-                    "Phone Content", isPhoneEmpty);
-
-            String emailText = basePage.getTextSafe(By.id("email"));
-            boolean isEmailEmpty = emailText.trim().isEmpty();
-            logStep(isEmailEmpty ? "✅ Email is empty (as expected)" : "❌ Email is not empty",
-                    "Email Content", isEmailEmpty);
-
-            String subjectText = basePage.getTextSafe(By.id("subject"));
-            boolean isSubjectEmpty = subjectText.trim().isEmpty();
-            logStep(isSubjectEmpty ? "✅ Subject is empty (as expected)" : "❌ Subject is not empty",
-                    "Subject Content", isSubjectEmpty);
-
-            String messageText = basePage.getTextSafe(By.id("message"));
-            boolean isMessageEmpty = messageText.trim().isEmpty();
-            logStep(isMessageEmpty ? "✅ Message is empty (as expected)" : "❌ Message is not empty",
-                    "Message Content", isMessageEmpty);
-
+            checkTextEmpty(By.id("fullname"), "Full Name");
+            checkTextEmpty(By.id("phone"), "Phone");
+            checkTextEmpty(By.id("email"), "Email");
+            checkTextEmpty(By.id("subject"), "Subject");
+            checkTextEmpty(By.id("message"), "Message");
 
             checkFieldErrorSoft(softAssert, By.id("fullname"), "Full Name", expectedError);
             checkFieldErrorSoft(softAssert, By.id("phone"), "Phone", expectedError);
@@ -105,7 +68,7 @@ public class ContactUsTests extends Base {
             checkFieldErrorSoft(softAssert, By.id("message"), "Message", expectedError);
 
         } catch (Exception e) {
-            smartLog("❌ Failed to validate form is empty : " + e.getMessage(), "Empty Form Error", false);
+            smartLog("❌ Failed to validate form is empty : " + e.getMessage(), "Empty Form Error", false, LogMode.HARD);
             throw e;
         } finally {
             softAssert.assertAll();
@@ -116,29 +79,26 @@ public class ContactUsTests extends Base {
     @Description("Fill form with valid data and verify thank you screen")
     public void testSuccessfulContactFormSubmission() throws InterruptedException {
         try {
-            basePage.openMainPage();
             contactUsPage.clickOnContactUs();
 
             basePage.sendKeysSafe(contactUsPage.fullNameField, "יוני חלון");
             basePage.sendKeysSafe(contactUsPage.phoneField, "0501234567");
             basePage.sendKeysSafe(contactUsPage.emailField, "test@example.com");
-
             basePage.chooseValueFromDropDownMenuSafe(contactUsPage.subjectField, "שירות");
-
             basePage.sendKeysSafe(contactUsPage.messageField, "הודעת בדיקה - נא לא ליצור קשר בפועל");
 
             Thread.sleep(2500);
             contactUsPage.pressSubmit();
-            smartLog("Form submitted", "Form Submission", true);
+            smartLog("Form submitted", "Form Submission", true, LogMode.SOFT);
 
             boolean thankYouVisible = basePage.isDisplayedSafe(contactUsPage.thankYouText);
             boolean backVisible = basePage.isDisplayedSafe(contactUsPage.backButton);
 
-            smartLog("Verify Thank You message is displayed", "Thank You", thankYouVisible);
-            smartLog("Verify Back to Home button is displayed", "Back Button", backVisible);
+            smartLog("Verify Thank You message is displayed", "Thank You", thankYouVisible, LogMode.SOFT);
+            smartLog("Verify Back to Home button is displayed", "Back Button", backVisible, LogMode.SOFT);
 
         } catch (Exception e) {
-            smartLog("❌ Failed to submit form or verify confirmation: " + e.getMessage(), "Form Submission Error", false);
+            smartLog("❌ Failed to submit form or verify confirmation: " + e.getMessage(), "Form Submission Error", false, LogMode.HARD);
             throw e;
         }
     }
@@ -147,28 +107,24 @@ public class ContactUsTests extends Base {
         try {
             WebElement element = driver.findElement(locator);
             String actualError = element.findElement(By.xpath("./following-sibling::span")).getText().trim();
-
             boolean match = actualError.equals(expectedError);
             smartLog((match ? "✅" : "❌") + " " + fieldName + " error message is " +
                             (match ? "correct" : "incorrect: expected '" + expectedError + "', got '" + actualError + "'"),
-                    fieldName + " Error", match);
+                    fieldName + " Error", match, LogMode.SOFT);
             softAssert.assertEquals(actualError, expectedError, fieldName + " error mismatch");
 
         } catch (NoSuchElementException e) {
-            smartLog("❌ Field not found: " + fieldName + " - " + locator.toString(), fieldName + " Error", false);
+            smartLog("❌ Field not found: " + fieldName + " - " + locator.toString(), fieldName + " Error", false, LogMode.SOFT);
             softAssert.fail("Field not found: " + fieldName);
         } catch (Exception e) {
-            smartLog("❌ Unexpected error while checking: " + fieldName + " - " + e.getMessage(), fieldName + " Error", false);
+            smartLog("❌ Unexpected error while checking: " + fieldName + " - " + e.getMessage(), fieldName + " Error", false, LogMode.SOFT);
             softAssert.fail("Unexpected error: " + fieldName + " - " + e.getMessage());
         }
     }
 
-    private void checkFieldError(By locator, String fieldName, String expectedError) {
-        try {
-            String actualError = contactUsPage.getFieldErrorText(locator);
-            assertTextEquals(actualError, expectedError, fieldName + " error validation");
-        } catch (Exception e) {
-            smartLog("❌ Missing or incorrect error for field: " + fieldName, "" + fieldName, false);
-        }
+    private void checkTextEmpty(By locator, String fieldName) {
+        String text = basePage.getTextSafe(locator);
+        boolean isEmpty = text.trim().isEmpty();
+        smartLog(isEmpty ? "✅ " + fieldName + " is empty (as expected)" : "❌ " + fieldName + " is not empty", fieldName + " Content", isEmpty, LogMode.SOFT);
     }
 }

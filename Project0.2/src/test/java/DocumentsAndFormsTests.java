@@ -10,61 +10,50 @@ public class DocumentsAndFormsTests extends Base {
     public void testDocumentSearchAndResultDisplay() throws Exception {
         try {
 
-            basePage.openMainPage();
-            smartLog("✅ Opened homepage", "Main Page", true);
 
             documentsAndForms.scrollAndClickToDocumentsAndForms();
-            smartLog("✅ Scrolled and clicked Documents and Forms", "Documents and Forms", true);
+            smartLog("✅ Scrolled and clicked Documents and Forms", "Documents and Forms", true, LogMode.SOFT);
 
             documentsAndForms.FillFreeTextField();
-            smartLog("✅ Filled free text search field", "FreeText", true);
+            smartLog("✅ Filled free text search field", "FreeText", true, LogMode.SOFT);
 
             documentsAndForms.clickSearch();
-            smartLog("✅ Clicked search button", "Search", true);
+            smartLog("✅ Clicked search button", "Search", true, LogMode.SOFT);
 
-// לבדוק אם צריך
-//            List<String> rowTexts = documentsAndForms.getSearchRowTexts();
-//            assertTextEquals(rowTexts.get(0), "בקשה לביטול פוליסה", "Check document name");
-//
-
-            // Optional: validate results
             List<String> results = documentsAndForms.getSearchRowTexts();
-            if(results.size() >= 3){
-                assertTextEquals(results.get(0), "", "Check document name");
-                assertTextEquals(results.get(1), "", "Check primary insurance");
-                assertTextEquals(results.get(2), "", "Check secondary insurance");
-            }else
-                smartLog("❌ Test 'testDocumentSearchAndResultDisplay' failed: no result was found" , "Document Search Failure", false);
-
-
-
-
+            if (results.size() >= 3) {
+                assertTextEquals(results.get(0), "בקשה לביטול פוליסה", "Check document name");
+                assertTextEquals(results.get(1), "רכב", "Check primary insurance");
+                assertTextEquals(results.get(2), "כללי", "Check secondary insurance");
+            } else {
+                smartLog("❌ Test 'testDocumentSearchAndResultDisplay' failed: not enough results found", "Document Search Failure", false, LogMode.HARD);
+            }
 
         } catch (Exception e) {
-            smartLog("❌ Test 'testDocumentSearchAndResultDisplay' failed: " + e.getMessage(), "Document Search Failure", false);
+            smartLog("❌ Test 'testDocumentSearchAndResultDisplay' failed: " + e.getMessage(), "Document Search Failure", false, LogMode.HARD);
             throw e;
+        } finally {
+            assertAllSoft();
         }
     }
-
 
     // TC-059
     @Test(description = "Search for forms and then clear the form fields")
     @Description("Searches a document, verifies result and then clears the form")
     public void testDocumentSearchAndClear() throws Exception {
         try {
-            basePage.openMainPage();
 
             documentsAndForms.scrollAndClickToDocumentsAndForms();
-            smartLog("✅ Scrolled and clicked Documents and Forms", "documentsAndForms", true);
+            smartLog("✅ Scrolled and clicked Documents and Forms", "Documents and Forms", true, LogMode.SOFT);
 
             documentsAndForms.selectSubjectDropDownMenu();
-            smartLog("✅ Selected subject dropdown", "subject", true);
+            smartLog("✅ Selected subject dropdown", "Subject Dropdown", true, LogMode.SOFT);
 
             documentsAndForms.selectTypeDropDownMenu();
-            smartLog("✅ Selected type dropdown", "type", true);
+            smartLog("✅ Selected type dropdown", "Type Dropdown", true, LogMode.SOFT);
 
             documentsAndForms.clickSearch();
-            smartLog("✅ Clicked search button", "search", true);
+            smartLog("✅ Clicked search button", "Search", true, LogMode.SOFT);
 
             List<String> rowTexts = documentsAndForms.getSearchRowTexts();
 
@@ -73,7 +62,7 @@ public class DocumentsAndFormsTests extends Base {
             assertTextEquals(rowTexts.get(2), "כללי", "Check secondary insurance");
 
             documentsAndForms.clickClear();
-            smartLog("✅ Clicked clear button", "clear", true);
+            smartLog("✅ Clicked clear button", "Clear", true, LogMode.SOFT);
 
             List<String> clearedTexts = documentsAndForms.getSearchRowTexts();
 
@@ -82,8 +71,10 @@ public class DocumentsAndFormsTests extends Base {
             assertTextEquals(clearedTexts.get(2), "", "Check secondary insurance cleared");
 
         } catch (Exception e) {
-            smartLog("❌ Test 'testDocumentSearchAndClear' failed: " + e.getMessage(), "TestFailure", false);
+            smartLog("❌ Test 'testDocumentSearchAndClear' failed: " + e.getMessage(), "Test Failure", false, LogMode.HARD);
             throw e;
+        } finally {
+            assertAllSoft();
         }
     }
 }
