@@ -179,7 +179,7 @@ import org.testng.annotations.Test;
 
 public class OnlineTravelInsuranceTests extends Base {
 
-    @BeforeMethod
+
     public void initTravelFlow() throws Exception {
         onlineTravelInsurancePage.scrollToTravelInsuranceButton();
         smartLog("✅ Scrolled to Travel Insurance section", "ScrollToTravel", true, LogMode.SOFT);
@@ -189,6 +189,9 @@ public class OnlineTravelInsuranceTests extends Base {
 
         basePage.switchToNewTab();
 
+        basePage.waitForElementToAppear(By.id("root"));
+
+        // put it on utilitys
         String expectedTitle = "ביטוח חקלאי - ביטוח נסיעות לחו״ל";
         String actualTitle = basePage.getTitle();
 
@@ -199,11 +202,12 @@ public class OnlineTravelInsuranceTests extends Base {
         smartLog(introVisible ? "✅ Quote intro section is visible" : "❌ Intro section is not visible", "IntroVisible", introVisible, LogMode.SOFT);
     }
 
-    // TC-038 - כניסה ופתיחת עמוד הביטוח
+
     @Test(description = "TC-038 - Verify landing on online travel insurance flow")
     @Description("Open insurance flow, verify title and main intro block")
     public void test_StartInsuranceFlow() throws Exception {
         try {
+            initTravelFlow();
             // הכל ב-BeforeMethod
         } catch (Exception e) {
             smartLog("❌ Test failed: " + e.getMessage(), "StartFlowFail", false, LogMode.HARD);
@@ -213,13 +217,14 @@ public class OnlineTravelInsuranceTests extends Base {
         }
     }
 
-    // TC-039 - האם רכשת ביטוח בעבר?
+
     @Test(description = "TC-039 - Verify previous insurance question appears")
     @Description("Click continue and verify previous insurance question and buttons")
     public void test_PreviousInsuranceQuestion() throws Exception {
         try {
-             continueAndVerifyPreviousInsuranceQuestionStep();
-
+            initTravelFlow();
+            goToPreviousInsuranceQuestionStep();
+            continueAndVerifyPreviousInsuranceQuestionStep();
         } catch (Exception e) {
             smartLog("❌ Test failed: " + e.getMessage(), "PreviousQuestionFail", false, LogMode.HARD);
             throw e;
@@ -228,11 +233,12 @@ public class OnlineTravelInsuranceTests extends Base {
         }
     }
 
-    // TC-040 - האם כל הנוסעים יוצאים מישראל?
+
     @Test(description = "TC-040 - Verify passengers from Israel question appears")
     @Description("Continue twice and verify question and both options")
     public void test_PassengersFromIsraelQuestion() throws Exception {
         try {
+            initTravelFlow();
             goToPreviousInsuranceQuestionStep();
             continueAndVerifyPreviousInsuranceQuestionStep();
             verifyPassengersFromIsraelQuestionStep();
@@ -250,6 +256,7 @@ public class OnlineTravelInsuranceTests extends Base {
     @Description("Navigate to online travel insurance, select 'previously purchased insurance' and verify quote options page appears")
     public void test_QuoteWithPreviousInsurance() throws Exception {
         try {
+            initTravelFlow();
             continueAndVerifyPreviousInsuranceQuestionStep();
 
             // בוחרים שכבר רכש בעבר
@@ -315,7 +322,7 @@ public class OnlineTravelInsuranceTests extends Base {
     }
 
 
-    // פונקציה כללית להמשיך לשאלה הבאה
+
     public void continueToNextQuestion() throws Exception {
         onlineTravelInsurancePage.scrollToLetsContinueButton();
         onlineTravelInsurancePage.clickOnLetsContinueButton();
@@ -330,14 +337,11 @@ public class OnlineTravelInsuranceTests extends Base {
         smartLog("✅ Clicked on second 'Continue'", "ClickContinueBtn2", true, LogMode.HARD);
     }
 
-    // פונקציה כללית להמשיך לשאלה הבאה
+
     public void continueAndVerifyPreviousInsuranceQuestionStep() throws Exception {
-
-
         String question = onlineTravelInsurancePage.getPreviousInsuranceQuestionText();
         boolean questionOk = question.contains("רכשת ביטוח");
         smartLog(questionOk ? "✅ Found question: " + question : "❌ Wrong question text: " + question, "PreviousQuestion", questionOk, LogMode.SOFT);
-        System.out.println("Found question " + questionOk + question);
 
 
         boolean firstDisplayed = onlineTravelInsurancePage.isFirstTimeOptionDisplayed();
@@ -350,7 +354,6 @@ public class OnlineTravelInsuranceTests extends Base {
     }
 
     public void verifyPassengersFromIsraelQuestionStep() throws Exception {
-
         onlineTravelInsurancePage.clickFirstTimeOptionButton();
 
         String question = onlineTravelInsurancePage.getPassengersFromIsraelQuestionText();
@@ -366,6 +369,5 @@ public class OnlineTravelInsuranceTests extends Base {
                 "", noOptionDisplayed, LogMode.SOFT);
 
         boolean optionsOk = yesOptionDisplayed && noOptionDisplayed;
-
     }
 }

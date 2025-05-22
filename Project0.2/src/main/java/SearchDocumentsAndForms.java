@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DocumentsAndForms {
+public class SearchDocumentsAndForms {
 
     private WebDriver driver;
     private BasePage basePage;
@@ -19,7 +19,7 @@ public class DocumentsAndForms {
     private final By list = By.cssSelector(".table__row:not(.row--hide)");
     private final By freeTextField = By.id("opentext");
 
-    public DocumentsAndForms(WebDriver driver, BasePage basePage) {
+    public SearchDocumentsAndForms(WebDriver driver, BasePage basePage) {
         this.driver = driver;
         this.basePage = basePage;
     }

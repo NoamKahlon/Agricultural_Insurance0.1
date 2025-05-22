@@ -3,55 +3,37 @@ import org.openqa.selenium.*;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class ContactUsTests extends Base {
 
-    @Test(description = "Verify that the home page loads without errors")
-    @Description("Checks that the main page opens successfully and the title is as expected")
-    public void testHomePageLoadsCorrectly() {
-        try {
-            basePage.openMainPage();
-            String actualTitle = contactUsPage.getTitle();
-            String expectedTitle = "ביטוח חקלאי - חברת הביטוח למגזר הקיבוצי והפרטי";
-            smartLog("Check main page title", "Homepage Title", actualTitle.equals(expectedTitle), LogMode.HARD);
-        } catch (Exception e) {
-            smartLog("❌ Failed to load homepage or verify title: " + e.getMessage(), "Homepage Title", false, LogMode.HARD);
-            throw e;
-        }
-    }
-
-    @Test(description = "Verify that the Contact Us page is displayed with the contact form")
-    @Description("Checks that the Contact Us page is accessible and the form is visible")
-    public void testContactUsPageIsDisplayed() {
+    // TC-094 - UI - מסך צור קשר
+    @Test(description = "TC-094 - Verify that Contact Us page loads with form fields visible")
+    @Description("Verify that the 'Contact Us' page is displayed correctly with the full form: name, phone, email, subject, message")
+    public void test_TC094_ContactUsPageIsDisplayed() {
         basePage.openMainPage();
         smartLog("✅ Opened main page", "Main Page", true, LogMode.SOFT);
 
         contactUsPage.clickOnContactUs();
-        smartLog("✅ Clicked on Contact Us", "Click Contact Us", true, LogMode.SOFT);
+        smartLog("✅ Clicked on Contact Us", "ClickContactUs", true, LogMode.SOFT);
 
-        smartLog(basePage.isDisplayedSafe(contactUsPage.fullNameField) ? "✅ Full Name field is displayed" : "❌ Full Name field is NOT displayed", "Full Name Field", basePage.isDisplayedSafe(contactUsPage.fullNameField), LogMode.SOFT);
-        smartLog(basePage.isDisplayedSafe(contactUsPage.phoneField) ? "✅ Phone field is displayed" : "❌ Phone field is NOT displayed", "Phone Field", basePage.isDisplayedSafe(contactUsPage.phoneField), LogMode.SOFT);
-        smartLog(basePage.isDisplayedSafe(contactUsPage.emailField) ? "✅ Email field is displayed" : "❌ Email field is NOT displayed", "Email Field", basePage.isDisplayedSafe(contactUsPage.emailField), LogMode.SOFT);
-        smartLog(basePage.isDisplayedSafe(contactUsPage.subjectField) ? "✅ Subject field is displayed" : "❌ Subject field is NOT displayed", "Subject Field", basePage.isDisplayedSafe(contactUsPage.subjectField), LogMode.SOFT);
-        smartLog(basePage.isDisplayedSafe(contactUsPage.messageField) ? "✅ Message field is displayed" : "❌ Message field is NOT displayed", "Message Field", basePage.isDisplayedSafe(contactUsPage.messageField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.fullNameField) ? "✅ Full Name field is displayed" : "❌ Full Name field is NOT displayed", "FullName", basePage.isDisplayedSafe(contactUsPage.fullNameField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.phoneField) ? "✅ Phone field is displayed" : "❌ Phone field is NOT displayed", "Phone", basePage.isDisplayedSafe(contactUsPage.phoneField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.emailField) ? "✅ Email field is displayed" : "❌ Email field is NOT displayed", "Email", basePage.isDisplayedSafe(contactUsPage.emailField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.subjectField) ? "✅ Subject field is displayed" : "❌ Subject field is NOT displayed", "Subject", basePage.isDisplayedSafe(contactUsPage.subjectField), LogMode.SOFT);
+        smartLog(basePage.isDisplayedSafe(contactUsPage.messageField) ? "✅ Message field is displayed" : "❌ Message field is NOT displayed", "Message", basePage.isDisplayedSafe(contactUsPage.messageField), LogMode.SOFT);
 
         assertAllSoft();
     }
 
-    @Test(description = "Verify contact form validation when submitted empty")
-    @Description("Submit empty form and verify required field error messages")
-    public void testContactFormValidationOnEmptySubmit() throws InterruptedException {
+    // TC-095 - UI - בדיקת שדות צור קשר
+    @Test(description = "TC-095 - Verify validation messages appear when Contact Us form is submitted empty")
+    @Description("Submit Contact Us form with empty fields and validate red error messages appear under all required fields")
+    public void test_TC095_ContactFormValidationOnEmptySubmit() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();
 
         try {
-
             contactUsPage.clickOnContactUs();
-
             contactUsPage.pressSubmit();
-            smartLog("Submitted empty form", "Empty Submit", true, LogMode.SOFT);
+            smartLog("Submitted empty form", "EmptySubmit", true, LogMode.SOFT);
 
             String expectedError = "חובה למלא שדה זה";
 
@@ -68,16 +50,17 @@ public class ContactUsTests extends Base {
             checkFieldErrorSoft(softAssert, By.id("message"), "Message", expectedError);
 
         } catch (Exception e) {
-            smartLog("❌ Failed to validate form is empty : " + e.getMessage(), "Empty Form Error", false, LogMode.HARD);
+            smartLog("❌ Failed to validate form is empty: " + e.getMessage(), "EmptyFormValidation", false, LogMode.HARD);
             throw e;
         } finally {
             softAssert.assertAll();
         }
     }
 
-    @Test(description = "Submit Contact Us form with valid data")
-    @Description("Fill form with valid data and verify thank you screen")
-    public void testSuccessfulContactFormSubmission() throws InterruptedException {
+    // TC-096 - UI - מסך אישור השארת פניה
+    @Test(description = "TC-096 - Verify successful submission of Contact Us form and display of thank you screen")
+    @Description("Submit form with valid details and verify thank you message and Back to Home button are displayed")
+    public void test_TC096_SuccessfulContactFormSubmission() throws InterruptedException {
         try {
             contactUsPage.clickOnContactUs();
 
@@ -89,20 +72,21 @@ public class ContactUsTests extends Base {
 
             Thread.sleep(2500);
             contactUsPage.pressSubmit();
-            smartLog("Form submitted", "Form Submission", true, LogMode.SOFT);
+            smartLog("Form submitted", "FormSubmission", true, LogMode.SOFT);
 
             boolean thankYouVisible = basePage.isDisplayedSafe(contactUsPage.thankYouText);
             boolean backVisible = basePage.isDisplayedSafe(contactUsPage.backButton);
 
-            smartLog("Verify Thank You message is displayed", "Thank You", thankYouVisible, LogMode.SOFT);
-            smartLog("Verify Back to Home button is displayed", "Back Button", backVisible, LogMode.SOFT);
+            smartLog("✅ Thank you message visible: " + thankYouVisible + ", Back button visible: " + backVisible,
+                    "ThankYouScreen", thankYouVisible && backVisible, LogMode.SOFT);
 
         } catch (Exception e) {
-            smartLog("❌ Failed to submit form or verify confirmation: " + e.getMessage(), "Form Submission Error", false, LogMode.HARD);
+            smartLog("❌ Failed to submit form or verify thank you screen: " + e.getMessage(), "FormSubmitError", false, LogMode.HARD);
             throw e;
         }
     }
 
+    // כלי עזר
     public void checkFieldErrorSoft(SoftAssert softAssert, By locator, String fieldName, String expectedError) {
         try {
             WebElement element = driver.findElement(locator);

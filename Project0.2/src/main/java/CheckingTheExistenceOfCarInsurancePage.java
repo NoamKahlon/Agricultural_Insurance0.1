@@ -1,9 +1,8 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class InsuranceCheckPage {
+public class CheckingTheExistenceOfCarInsurancePage {
 
     private final WebDriver driver;
     private final BasePage basePage;
@@ -30,7 +29,7 @@ public class InsuranceCheckPage {
 
 
 
-    public InsuranceCheckPage(WebDriver driver, BasePage basePage) {
+    public CheckingTheExistenceOfCarInsurancePage(WebDriver driver, BasePage basePage) {
         this.driver = driver;
         this.basePage = basePage;
     }

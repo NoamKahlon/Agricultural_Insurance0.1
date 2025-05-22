@@ -107,12 +107,10 @@ public class OnlineTravelInsurancePage {
     }
 
     private final By travelInsuranceButton = By.id("abroadplus");
-//    private final By letsContinueButton = By.cssSelector("div[data-f='procceed']");
     private final By letsContinueButton = By.cssSelector("button.procceed");
     private final By quoteIntroBlock = By.xpath("//div[contains(text(),'קיבלת הנחה בלעדית לרכישה און ליין')]");
     private final By previousInsuranceQuestion = By.xpath("//h1[contains(text(),'רכשת ביטוח')]");
     private final By passengersFromIsraelQuestion = By.xpath("//h1[contains(.,'האם כל הנוסעים יוצאים מישראל')]");
-    //private final By passengersFromIsraelQuestion = By.tagName("h1");
     private final By passengersFromIsraelYes = By.cssSelector("div[data-f='yes']");
     private final By passengersFromIsraelNo = By.cssSelector("div[data-f='no']");
     private final By firstTimeOptionButton = By.cssSelector("div[data-f='first-time-no']");
