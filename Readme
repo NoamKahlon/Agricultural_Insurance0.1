@@ -1,0 +1,3 @@
+mvn clean test ;  mvn allure:report
+mvn clean test -Dtest=test_TC059_DocumentSearchAndClear ; mvn allure:report
+mvn clean test -Dtest=OnlineTravelInsuranceTests#test_PreviousInsuranceQuestion ; mvn allure:report

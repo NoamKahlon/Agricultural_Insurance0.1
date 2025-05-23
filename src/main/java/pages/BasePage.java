@@ -1,0 +1,334 @@
+
+package pages;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
+
+public class BasePage {
+
+    private final WebDriver driver;
+    private final int secendsToWait;
+    private String originalWindow;
+
+
+    public BasePage(WebDriver driver) {
+        this.driver = driver;
+        secendsToWait = 5;
+    }
+
+
+    public void saveOriginalWindow() {
+        this.originalWindow = driver.getWindowHandle();
+    }
+
+    public String getOriginalWindow() {
+        return this.originalWindow;
+    }
+
+
+    // Actions
+    public void click(By locator) {
+        try {
+            waitForElementToBeClickable(locator);
+            WebElement element = driver.findElement(locator);
+            element.click();
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to click element: " + locator, e);
+        }
+    }
+
+    public boolean clickSafe(By locator) {
+        try {
+            waitForElementToBeClickable(locator);
+            WebElement element = driver.findElement(locator);
+            element.click();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void forceClick(By locator) {
+        try {
+            WebElement element = waitForElementToBeClickable(locator);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to force click element: " + locator, e);
+        }
+    }
+
+    public boolean forceClickSafe(By locator) {
+        try {
+            WebElement element = waitForElementToBeClickable(locator);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean scrollToElement(By locator) {
+        try {
+            WebElement element = waitForElementToAppear(locator);
+
+            Number initialScrollY = (Number) ((JavascriptExecutor) driver)
+                    .executeScript("return window.scrollY;");
+
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+            return wait.until(d -> {
+                Number currentScrollY = (Number) ((JavascriptExecutor) d)
+                        .executeScript("return window.scrollY;");
+                return currentScrollY != null && !currentScrollY.equals(initialScrollY);
+            });
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+
+
+//    public void scrollToElement(By locator) throws Exception {
+//        try {
+//            WebElement element = waitForElementToAppear(locator);
+//            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+//            Thread.sleep(500);
+//        } catch (Exception e) {
+//            throw new Exception("❌ Failed to scroll to element: " + locator, e);
+//        }
+//    }
+
+    public boolean scrollToElementSafe(By locator) {
+        try {
+            WebElement element = waitForElementToAppear(locator);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+            Thread.sleep(500);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void scrollToElementForce(By locator) throws Exception {
+        try {
+            WebElement element = waitForElementToAppear(locator);
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'start'});",
+                    element
+            );
+        } catch (Exception e) {
+            throw new Exception("❌ Failed to force-scroll to element: " + locator, e);
+        }
+    }
+
+    public void pickDate(By locator, String date) {
+        try {
+            waitForElementToAppear(locator);
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].removeAttribute('readonly'); arguments[0].value = arguments[1];",
+                    driver.findElement(locator), date);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to pick date '" + date + "' for locator: " + locator, e);
+        }
+    }
+
+    public void chooseValueFromDropDownMenu(By locator, int index) {
+        try {
+            waitForElementToAppear(locator);
+            WebElement dropDownMenu = getElement(locator);
+            new Select(dropDownMenu).selectByIndex(index);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to select index " + index + " from dropdown: " + locator, e);
+        }
+    }
+
+
+    public boolean chooseValueFromDropDownMenuSafe(By locator, String visibleText) {
+        try {
+            waitForElementToAppear(locator);
+            WebElement dropDown = getElement(locator);
+            new Select(dropDown).selectByVisibleText(visibleText);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    // Set
+    public void sendKeys(By locator, String keys) {
+        try {
+            waitForElementToAppear(locator);
+            getElement(locator).sendKeys(keys);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to send keys to element: " + locator.toString(), e);
+        }
+    }
+
+    public boolean sendKeysSafe(By locator, String keys) {
+        try {
+            waitForElementToAppear(locator);
+            getElement(locator).sendKeys(keys);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Get
+    public String getTitle() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(secendsToWait));
+            wait.until(driver -> {
+                String title = driver.getTitle();
+                return title != null && title.length() > 5;
+            });
+
+            return driver.getTitle();
+
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+
+    public String getText(By locator) {
+        try {
+            waitForElementToAppear(locator);
+            return driver.findElement(locator).getText();
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to get text from element: " + locator, e);
+        }
+    }
+
+    public String getTextSafe(By locator) {
+        try {
+            waitForElementToAppear(locator);
+            return driver.findElement(locator).getText();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public WebElement getElement(By locator) {
+        try {
+            waitForElementToAppear(locator);
+            return driver.findElement(locator);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to get element: " + locator, e);
+        }
+    }
+
+    public List<WebElement> getElements(By locator) {
+        try {
+            waitForElementToAppear(locator);
+            return driver.findElements(locator);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to get elements: " + locator, e);
+        }
+    }
+
+    // Open sites
+    public void openMainPage() {
+        try {
+            driver.get("https://www.bth.co.il/");
+            waitForPageToLoad();
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to open Main Page", e);
+        }
+    }
+
+
+
+    // Wait
+    public void waitForPageToLoad() {
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(
+                webDriver -> ((JavascriptExecutor) webDriver)
+                        .executeScript("return document.readyState").equals("complete")
+        );
+    }
+
+    public WebElement waitForElementToAppear(By locator) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(secendsToWait));
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Element did not appear: " + locator, e);
+        }
+    }
+
+    public WebElement waitForElementToBeClickable(By locator) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(secendsToWait));
+            return wait.until(ExpectedConditions.elementToBeClickable(locator));
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Element not clickable: " + locator, e);
+        }
+    }
+
+    public void waitForNumberOfElements(By locator, int expectedCount) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(driver -> driver.findElements(locator).size() >= expectedCount);
+    }
+
+
+    public boolean isDisplayed(By locator) {
+        try {
+            waitForElementToAppear(locator);
+            return driver.findElement(locator).isDisplayed();
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to check if element is displayed: " + locator, e);
+        }
+    }
+
+    public boolean isDisplayedSafe(By locator) {
+        try {
+            waitForElementToAppear(locator);
+            return driver.findElement(locator).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+// check!
+    public boolean switchToNewTab() {
+        try {
+            String originalWindow = driver.getWindowHandle();
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(secendsToWait));
+            wait.until(driver -> driver.getWindowHandles().size() > 1);
+            for (String windowHandle : driver.getWindowHandles()) {
+                if (!windowHandle.equals(originalWindow)) {
+                    driver.switchTo().window(windowHandle);
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+            System.err.println("❌ Failed to switch to new tab: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+    public boolean isTextEquals(By locator, String expectedText) {
+        try {
+            WebElement element = waitForElementToAppear(locator);
+            String actualText = element.getText().trim();
+            return actualText.equals(expectedText.trim());
+        } catch (Exception e) {
+            System.out.println("❌ Failed to compare text for locator: " + locator + ". Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+}
