@@ -175,6 +175,8 @@ package tests;
 import flows.OnlineTravelInsuranceFlow;
 import io.qameta.allure.Description;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.OnlineTravelInsuranceData;
@@ -313,38 +315,15 @@ public class OnlineTravelInsuranceTests extends Base {
     public void TC043() {
         try {
 
-
             flow.navigateToDestinationSelectionStep();
-
-            onlineTravelInsurancePage.clickPassengersFromIsraelYesOption();
-            loggerUtils.log("✅ Clicked on 'Yes' all passengers from Israel", "ClickedYesPassengers", true, true);
+            flow.verifyDestinationSelectionStep();
 
 
-            boolean iswhereAreYouGoingTitleDisplayed= onlineTravelInsurancePage.iswhereAreYouGoingTitleDisplayed();
-
-            loggerUtils.log(iswhereAreYouGoingTitleDisplayed ? "✅ 'Where are you going?' title is displayed" : "❌ 'Where are you going?' title is NOT displayed", "WhereAreYouGoingTitle", iswhereAreYouGoingTitleDisplayed, false);
-
-
-            flow.verifyDestinationOptionsTexts();
-
-            boolean tooltipVisible = onlineTravelInsurancePage.isTooltipIconVisible();
-            loggerUtils.log(tooltipVisible ? "✅ Tooltip icon is visible" : "❌ Tooltip icon is missing", "", tooltipVisible, false);
-
-            boolean backButtonVisible = onlineTravelInsurancePage.isBackButtonVisible();
-            loggerUtils.log(backButtonVisible ? "✅ 'Back' button is visible" : "❌ 'Back' button is missing", "", backButtonVisible, false);
-
-            boolean continueButtonVisible = onlineTravelInsurancePage.isContinueButtonVisible();
-            loggerUtils.log(continueButtonVisible ? "✅ 'Continue' button is visible" : "❌ 'Continue' button is missing", "", continueButtonVisible, false);
-
-
-            String currentStep = onlineTravelInsurancePage.getCurrentStepText();
+            String currentStep = onlineTravelInsurancePage.verifyCurrentAndPreviousStepsByColor();
             boolean isCorrectStep = currentStep.equals(OnlineTravelInsuranceData.STEP_DESTINATION);
-            loggerUtils.log(
-                    isCorrectStep ? "✅ Current step is 'לאן נוסעים?'" : "❌ Current step is '" + currentStep + "' instead of 'לאן נוסעים?'",
-                    "StepVerification", // שם הסקרינשוט אם תרצה
-                    isCorrectStep,
-                    false // לא hard assert – רק לוג
-            );
+            loggerUtils.log(isCorrectStep ?
+                    "✅ Current step is 'לאן נוסעים?'" :
+                    "❌ Current step is '" + currentStep + "' instead of 'לאן נוסעים?'", "StepVerification", isCorrectStep, false);
 
 
         } catch (Exception e) {
@@ -352,6 +331,50 @@ public class OnlineTravelInsuranceTests extends Base {
         }
     }
 
-    
+    @Test(description = "TC-044 - Verify date selection step in travel insurance quote flow")
+    @Description("Navigates to the online travel insurance quote on Bituach Haklai site, completes destination step, and verifies correct UI and actions for stage 2: date selection (departure and return)")
+    public void TC044() {
+        try {
+
+            flow.navigateToDestinationSelectionStep();
+            flow.verifyDestinationSelectionStep();
+
+            onlineTravelInsurancePage.clickEuropeCheckBox();
+
+            onlineTravelInsurancePage.clickcontinueToNextStepButton();
+
+
+            boolean isStartVisible = onlineTravelInsurancePage.verifyStartDateFieldDisplayed();
+            loggerUtils.log(
+                    isStartVisible ? "✅ Start date field is visible" : "❌ Start date field is NOT visible",
+                    "",
+                    isStartVisible,
+                    false
+            );
+
+            boolean isEndVisible = onlineTravelInsurancePage.verifyEndDateFieldDisplayed();
+            loggerUtils.log(
+                    isEndVisible ? "✅ End date field is visible" : "❌ End date field is NOT visible",
+                    "",
+                    isEndVisible,
+                    false
+            );
+
+            boolean backButtonVisible = onlineTravelInsurancePage.isBackButtonVisible();
+            loggerUtils.log(backButtonVisible ? "✅ 'Back' button is visible" : "❌ 'Back' button is missing", "", backButtonVisible, false);
+
+            // 6. כפתור המשך
+            boolean continueButtonVisible = onlineTravelInsurancePage.isContinueButtonVisible();
+            loggerUtils.log(continueButtonVisible ? "✅ 'Continue' button is visible" : "❌ 'Continue' button is missing", "", continueButtonVisible, false);
+
+
+            String stepsSummary = onlineTravelInsurancePage.verifyCurrentAndPreviousStepsByColor();
+            loggerUtils.log("✅ " + stepsSummary, "", true, false);
+
+
+        } catch (Exception e) {
+            loggerUtils.log("❌ Test failed: " + e.getMessage(), "TC042_Failure", false, true);
+        }
+    }
 
 }

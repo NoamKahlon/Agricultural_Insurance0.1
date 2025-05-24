@@ -130,17 +130,33 @@ public class OnlineTravelInsurancePage {
     //private final By DestinationTextElements = By.className("textForPickBoxLabelMobile");
     private final By DestinationTextElements = By.xpath("//*[contains(@class,'textForPickBoxLabelMobile')]");
     private final By TooltipIcon = By.cssSelector("svg.toolTipPic");
-    private final By backButton = By.cssSelector("div[data-f='back']");
-    private final By continueButton = By.cssSelector("div[data-f='continue']");
+    //private final By backButton = By.cssSelector("div[data-f='back']");
+//    private final By previousStepButton = By.className("sc-papXJ iGkwwW goback");
+//    private final By NextStepButton = By.cssSelector("sc-papXJ jyxUhb procceed");
+    private final By previousStepButton = By.cssSelector(".sc-papXJ.iGkwwW.goback");
+    private final By NextStepButton = By.cssSelector(".sc-papXJ.jyxUhb.procceed");
+
+   // private final By continueToNextStepButton = By.cssSelector("div[data-f='continue']");
+    private final By europeCheckBox = By.id("Europe");
+    public By startDateField = By.id("startDate");
+    public By endDateField = By.id("endDate");
 
 
-    public void scrollToTravelInsuranceButton() throws Exception {basePage.scrollToElementForce(travelInsuranceButton);}
+    public void scrollToTravelInsuranceButton() throws Exception {
+        basePage.scrollToElementForce(travelInsuranceButton);
+    }
 
-    public void clickOnOnlineTravelInsuranceButton() {basePage.click(travelInsuranceButton);}
+    public void clickOnOnlineTravelInsuranceButton() {
+        basePage.click(travelInsuranceButton);
+    }
 
-    public void clickOnContinueButton() {basePage.forceClick(letsContinueButton); }
+    public void clickOnContinueButton() {
+        basePage.forceClick(letsContinueButton);
+    }
 
-    public void scrollToLetsContinueButton() throws Exception {basePage.scrollToElementSafe(letsContinueButton);}
+    public void scrollToLetsContinueButton() throws Exception {
+        basePage.scrollToElementSafe(letsContinueButton);
+    }
 
     public void clickOnLetsContinueButton() {
         basePage.forceClick(letsContinueButton);
@@ -150,12 +166,18 @@ public class OnlineTravelInsurancePage {
         return basePage.isDisplayedSafe(quoteIntroBlock);
     }
 
-    public String getPreviousInsuranceQuestionText() {return basePage.getTextSafe(previousInsuranceQuestion);}
+    public String getPreviousInsuranceQuestionText() {
+        return basePage.getTextSafe(previousInsuranceQuestion);
+    }
 
 
-    public boolean isFirstTimeOptionDisplayed() {return basePage.isDisplayedSafe(firstTimeOptionButton); }
+    public boolean isFirstTimeOptionDisplayed() {
+        return basePage.isDisplayedSafe(firstTimeOptionButton);
+    }
 
-    public boolean isAlreadyPurchasedOptionDisplayed() {return basePage.isDisplayedSafe(alreadyPurchasedOptionButton);}
+    public boolean isAlreadyPurchasedOptionDisplayed() {
+        return basePage.isDisplayedSafe(alreadyPurchasedOptionButton);
+    }
 
     public String getPassengersFromIsraelQuestionText() {
         return basePage.getTextSafe(passengersFromIsraelQuestion);
@@ -169,25 +191,45 @@ public class OnlineTravelInsurancePage {
         return basePage.isDisplayedSafe(passengersFromIsraelNo);
     }
 
-    public void clickFirstTimeOptionButton() { basePage.click(firstTimeOptionButton); }
+    public void clickFirstTimeOptionButton() {
+        basePage.click(firstTimeOptionButton);
+    }
 
-    public void clickAlreadyPurchasedOptionButton() { basePage.click(alreadyPurchasedOptionButton); }
+    public void clickAlreadyPurchasedOptionButton() {
+        basePage.click(alreadyPurchasedOptionButton);
+    }
 
-    public void clickPassengersFromIsraelYesOption() { basePage.click(yesOption);}
+    public void clickPassengersFromIsraelYesOption() {
+        basePage.click(yesOption);
+    }
 
-    public void clickPassengersFromIsraelNoOption() { basePage.click(noOption);}
+    public void clickPassengersFromIsraelNoOption() {
+        basePage.click(noOption);
+    }
 
-    public boolean isStopProcessErrorDisplayed() {return basePage.isDisplayedSafe(purchaseBlockedTitle);}
+    public boolean isStopProcessErrorDisplayed() {
+        return basePage.isDisplayedSafe(purchaseBlockedTitle);
+    }
 
-    public boolean isBackToHomeButtonDisplayed() {return basePage.isDisplayedSafe(backToHomeButton);}
+    public boolean isBackToHomeButtonDisplayed() {
+        return basePage.isDisplayedSafe(backToHomeButton);
+    }
 
-    public String getHappyToSeeYouAgainText() { return basePage.getTextSafe(happyToSeeYouMesseage);}
+    public String getHappyToSeeYouAgainText() {
+        return basePage.getTextSafe(happyToSeeYouMesseage);
+    }
 
-    public boolean isPhoneFieldDisplayed() { return basePage.isDisplayedSafe(phoneField); }
+    public boolean isPhoneFieldDisplayed() {
+        return basePage.isDisplayedSafe(phoneField);
+    }
 
-    public boolean isIdFieldDisplayed() { return basePage.isDisplayedSafe(idField); }
+    public boolean isIdFieldDisplayed() {
+        return basePage.isDisplayedSafe(idField);
+    }
 
-    public boolean iswhereAreYouGoingTitleDisplayed() { return basePage.isDisplayedSafe(whereAreYouGoingTitle); }
+    public boolean iswhereAreYouGoingTitleDisplayed() {
+        return basePage.isDisplayedSafe(whereAreYouGoingTitle);
+    }
 
     public List<WebElement> getDestinationTextElements() {
         //basePage.waitForNumberOfElements(DestinationTextElements, 6); // ⬅ מחכה ל-6
@@ -196,28 +238,82 @@ public class OnlineTravelInsurancePage {
 
 
     public boolean isTooltipIconVisible() {
-            return basePage.isDisplayedSafe(TooltipIcon);
+        return basePage.isDisplayedSafe(TooltipIcon);
     }
 
 
     public boolean isBackButtonVisible() {
-            return basePage.isDisplayedSafe(backButton);
+        return basePage.isDisplayedSafe(previousStepButton);
     }
 
 
     public boolean isContinueButtonVisible() {
-            return basePage.isDisplayedSafe(continueButton);
+        return basePage.isDisplayedSafe(NextStepButton);
     }
 
 
-    public String getCurrentStepText() {
-        try {
-            WebElement currentStep = driver.findElement(By.cssSelector("div.step.current span"));
-            return currentStep.getText().trim();
-        } catch (NoSuchElementException e) {
-            return "❌ No current step found";
+
+    public String verifyCurrentAndPreviousStepsByColor() {
+        List<WebElement> steps = basePage.getElements(By.cssSelector("div.step"));
+        boolean currentStepFound = false;
+
+        StringBuilder stepsSummary = new StringBuilder();
+
+        for (WebElement step : steps) {
+            String text = step.getText().trim();
+            String classValue = step.getAttribute("class").trim();
+            String backgroundColor = step.getCssValue("background-color").replace(" ", "");
+
+            if (classValue.contains("current")) {
+                currentStepFound = true;
+
+                if (!backgroundColor.contains("31,47,102")) {
+                    throw new AssertionError("Current step '" + text + "' is not blue!");
+                }
+
+                stepsSummary
+                        .append("Current step: ").append(text)
+                        .append(" is in color blue , ");
+                break;
+
+            } else {
+                if (!backgroundColor.contains("96,187,112")) {
+                    throw new AssertionError("Completed step '" + text + "' is not green!");
+                }
+
+                stepsSummary
+                        .append("Completed step: ").append(text)
+                        .append(" is in color green\n");
+            }
         }
+
+        if (!currentStepFound) {
+            throw new AssertionError("No step is marked as current!");
+        }
+
+        return stepsSummary.toString();
     }
 
+
+
+
+    public void clickcontinueToNextStepButton() {
+        basePage.forceClick(NextStepButton);
+    }
+
+
+    public void clickEuropeCheckBox() {
+        basePage.clickCheckbox(europeCheckBox);
+    }
+
+
+
+    public boolean verifyStartDateFieldDisplayed(){
+        return basePage.isDisplayed(startDateField);
+    }
+
+    public boolean verifyEndDateFieldDisplayed(){
+        return basePage.isDisplayed(endDateField);
+    }
 
 }

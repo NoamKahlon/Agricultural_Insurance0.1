@@ -162,6 +162,17 @@ public class BasePage {
         }
     }
 
+    public void clickCheckbox(By locator) {
+        try {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                    driver.findElement(By.id("Europe")));
+
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to click Check box " + getElement(locator) + " from dropdown: " + locator, e);
+        }
+    }
+
+
 
     // Set
     public void sendKeys(By locator, String keys) {

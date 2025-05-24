@@ -156,12 +156,43 @@ public class OnlineTravelInsuranceFlow {
         }
     }
 
-
     String cleanText(String text) {
         return text
                 .replaceAll("\\p{C}", "")        // מסיר תווים לא-מודפסים (invisible unicode chars)
                 .replaceAll("\\s+", " ")         // מאחד רווחים
                 .trim();                         // מסיר רווחים מהקצוות
     }
+
+
+
+    public void verifyDestinationSelectionStep() {
+        // 1. לחיצה על כן
+        onlineTravelInsurancePage.clickPassengersFromIsraelYesOption();
+        loggerUtils.log("✅ Clicked on 'Yes' all passengers from Israel", "ClickedYesPassengers", true, true);
+
+        // 2. כותרת "לאן נוסעים?"
+        boolean titleDisplayed = onlineTravelInsurancePage.iswhereAreYouGoingTitleDisplayed();
+        loggerUtils.log(titleDisplayed ? "✅ 'Where are you going?' title is displayed" : "❌ 'Where are you going?' title is NOT displayed", "", titleDisplayed, false);
+
+        // 3. בדיקת אופציות
+        verifyDestinationOptionsTexts(); // מניח שכבר קיים
+
+        // 4. Tooltip
+        boolean tooltipVisible = onlineTravelInsurancePage.isTooltipIconVisible();
+        loggerUtils.log(tooltipVisible ? "✅ Tooltip icon is visible" : "❌ Tooltip icon is missing", "", tooltipVisible, false);
+
+        // 5. כפתור חזור
+        boolean backButtonVisible = onlineTravelInsurancePage.isBackButtonVisible();
+        loggerUtils.log(backButtonVisible ? "✅ 'Back' button is visible" : "❌ 'Back' button is missing", "", backButtonVisible, false);
+
+        // 6. כפתור המשך
+        boolean continueButtonVisible = onlineTravelInsurancePage.isContinueButtonVisible();
+        loggerUtils.log(continueButtonVisible ? "✅ 'Continue' button is visible" : "❌ 'Continue' button is missing", "", continueButtonVisible, false);
+
+        // 7. אימות שם השלב
+
+    }
+
+
 
 }
