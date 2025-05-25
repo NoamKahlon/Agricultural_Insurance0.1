@@ -23,7 +23,7 @@ public class SearchDocumentsAndFormsTests extends Base {
 
             flow.scrollClickAndSelectCarSubject();
 
-            searchDocumentsAndFormsPage.FillTextField();
+            searchDocumentsAndFormsPage.fillTextField();
             loggerUtils.log("✅ Entered free text search value", "FreeText", true, true);
 
 

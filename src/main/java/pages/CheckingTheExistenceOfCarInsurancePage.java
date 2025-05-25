@@ -6,23 +6,27 @@ import org.openqa.selenium.WebElement;
 
 public class CheckingTheExistenceOfCarInsurancePage {
 
+
+    // //////////// DRIVER + BASE ////////////
     private final WebDriver driver;
     private final BasePage basePage;
 
+    // //////////// TEST DATA ////////////
     private final String license = "23652125";
     private final String notValidlicense = "12345678";
     private final String dateValue = "04/11/2024";
 
+    // //////////// FORM FIELDS ////////////
     private final By licenseInputField = By.id("license-number");
-    private final By IsTheVehicleInsuredButton = By.cssSelector("body > main > section.actions > div.quick__container > ul > li:nth-child(1) > a");
     private final By datePicker = By.id("search-date");
+
+    // //////////// BUTTONS ////////////
     private final By searchButton = By.id("check-sub");
+    private final By isTheVehicleInsuredButton = By.cssSelector("body > main > section.actions > div.quick__container > ul > li:nth-child(1) > a");
+
+    // //////////// MESSAGES / VALIDATION TEXTS ////////////
     private final By successMessage = By.cssSelector(".success-msg.msg-form");
-    private final By errorMessage =  By.cssSelector("div.error-msg.msg-form[style*='display: block']");
-
-
-
-
+    private final By errorMessage = By.cssSelector("div.error-msg.msg-form[style*='display: block']");
 
 
     public CheckingTheExistenceOfCarInsurancePage(WebDriver driver, BasePage basePage) {
@@ -30,36 +34,43 @@ public class CheckingTheExistenceOfCarInsurancePage {
         this.basePage = basePage;
     }
 
-    public void enterLicenseNumber() {
-        basePage.sendKeys(licenseInputField, license,true);
+
+    //////////// GET ///////////////
+
+    public String getErrorText() {
+        return basePage.getText(errorMessage);
     }
 
-    public void enterInvalidLicenseNumber() {
-        basePage.sendKeys(licenseInputField, notValidlicense,true);
+    public String getSuccessText() {
+        return basePage.getText(successMessage);
     }
+
+    //////////// SET ///////////////
+
+    public void enterLicenseNumber() { basePage.sendKeys(licenseInputField, license);}
+
+    public void enterInvalidLicenseNumber() { basePage.sendKeys(licenseInputField, notValidlicense);}
 
     public void enterDate() {
         basePage.pickDate(datePicker, dateValue);
     }
 
+    //////////// CLICK ///////////////
+
     public void clickSearch() {
-        basePage.click(searchButton,true);
+        basePage.click(searchButton);
     }
 
-    public String getSuccessText() {
-        return basePage.getText(successMessage,true);
+    public void clickCheckingTheExistenceOfCarInsurance() throws Exception {
+        basePage.forceClick(isTheVehicleInsuredButton);
     }
 
-    public String getErrorText() {
-        return basePage.getText(errorMessage,true);
-    }
+    //////////// SCROLL /////////////
 
-    public boolean ScrollToCheckingTheExistenceOfCarInsurance() throws Exception {
-       return basePage.scrollToElement(IsTheVehicleInsuredButton);
-    }
-    public void ClickCheckingTheExistenceOfCarInsurance() throws Exception {
-        basePage.forceClick(IsTheVehicleInsuredButton,true);
-    }
+    public boolean scrollToCheckingTheExistenceOfCarInsurance() throws Exception
+    { return basePage.scrollToElement(isTheVehicleInsuredButton);}
+
+    //////////// VALIDATIONS /////////////
 
     public boolean isErrorTextRed() {
         WebElement result = driver.findElement(errorMessage);

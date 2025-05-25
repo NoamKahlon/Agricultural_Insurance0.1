@@ -16,10 +16,10 @@ public class CheckingTheExistenceOfCarInsuranceFlow {
 
     public void nevigateToCheckingTheExistenceOfCarInsurance() throws Exception {
 
-        checkingTheExistenceOfCarInsurancePage.ScrollToCheckingTheExistenceOfCarInsurance();
+        checkingTheExistenceOfCarInsurancePage.scrollToCheckingTheExistenceOfCarInsurance();
         loggerUtils.log("✅ Scroll to insurance check section", "InsuranceSection", true, false);
 
-        checkingTheExistenceOfCarInsurancePage.ClickCheckingTheExistenceOfCarInsurance();
+        checkingTheExistenceOfCarInsurancePage.clickCheckingTheExistenceOfCarInsurance();
         loggerUtils.log("✅ Navigated to insurance check section", "InsuranceSection", true, false);
 
     }

@@ -161,7 +161,7 @@ public class OnlineTravelInsuranceFlow {
         onlineTravelInsurancePage.clickPassengersFromIsraelYesOption();
         loggerUtils.log("✅ Clicked on 'Yes' all passengers from Israel", "ClickedYesPassengers", true, true);
 
-        boolean titleDisplayed = onlineTravelInsurancePage.iswhereAreYouGoingTitleDisplayed();
+        boolean titleDisplayed = onlineTravelInsurancePage.isWhereAreYouGoingTitleDisplayed();
         loggerUtils.log(titleDisplayed ? "✅ 'Where are you going?' title is displayed" : "❌ 'Where are you going?' title is NOT displayed", "", titleDisplayed, false);
 
         verifyDestinationOptionsTexts();

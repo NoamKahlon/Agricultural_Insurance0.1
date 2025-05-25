@@ -14,7 +14,7 @@ public class ContactUsTests extends Base {
 
     @BeforeMethod
     public void setup() {
-        this.flow = new ContactUsFlow(contactUsPage, loggerUtils);
+        this.flow = new ContactUsFlow(contactUsPage, loggerUtils,basePage);
         flow.clickOnContactUs();
     }
 
@@ -48,7 +48,7 @@ public class ContactUsTests extends Base {
 
             for (String fieldId : fieldIds) {
                 By errorLocator = By.id("error-" + fieldId);
-                String actualError = basePage.getText(errorLocator,false);
+                String actualError = basePage.getText(errorLocator);
                 boolean matches = actualError.equals(expectedError);
 
                 loggerUtils.log(matches ? "✅ " + fieldId + " error matches expected" : "❌ " + fieldId +
@@ -66,23 +66,26 @@ public class ContactUsTests extends Base {
     @Description("Submit form with valid details and verify thank you message and Back to Home button are displayed")
     public void test_TC096_SuccessfulContactFormSubmission() throws InterruptedException {
         try {
+
+            // להעביר לflow
+//            basePage.sendKeys(contactUsPage.getFullNameField(), ContactUsData.VALID_NAME);
+//            basePage.sendKeys(contactUsPage.getPhoneField(), ContactUsData.VALID_PHONE);
+//            basePage.sendKeys(contactUsPage.getEmailField(), ContactUsData.VALID_EMAIL);
+//            basePage.chooseValueFromDropDownMenuSafe(contactUsPage.getSubjectField(), ContactUsData.VALID_SUBJECT);
+//            basePage.sendKeys(contactUsPage.getMessageField(), ContactUsData.VALID_MESSAGE);
+//
+//            contactUsPage.pressSubmit();
+//            loggerUtils.log("✅ Form submitted", "FormSubmission", true, false);
+
             flow.VerifyContactUsFormIsDisplayed();
 
-            basePage.sendKeys(contactUsPage.getFullNameField(), ContactUsData.VALID_NAME,false);
-            basePage.sendKeys(contactUsPage.getPhoneField(), ContactUsData.VALID_PHONE,false);
-            basePage.sendKeys(contactUsPage.getEmailField(), ContactUsData.VALID_EMAIL,false);
-            basePage.chooseValueFromDropDownMenuSafe(contactUsPage.getSubjectField(), ContactUsData.VALID_SUBJECT);
-            basePage.sendKeys(contactUsPage.getMessageField(), ContactUsData.VALID_MESSAGE,false);
+            flow.fillAndSubmitContactForm();
 
-            contactUsPage.pressSubmit();
-            loggerUtils.log("✅ Form submitted", "FormSubmission", true, false);
-
-            boolean thankYouMessageIsVisible = basePage.isDisplayed(contactUsPage.getThankYouText(),false);
-            boolean backButtonIsVisible = basePage.isDisplayed(contactUsPage.getBackButton(),false);
-
+            boolean thankYouMessageIsVisible = contactUsPage.isThankYouMessageVisible();
             loggerUtils.log(thankYouMessageIsVisible ? "✅ Thank you message is visible" : "❌ Thank you message is NOT visible",
                     "ThankYouMessage", thankYouMessageIsVisible, false);
 
+            boolean backButtonIsVisible = contactUsPage.isBackButtonVisible();
             loggerUtils.log(backButtonIsVisible ? "✅ Back to home button is visible" : "❌ Back to home button is NOT visible",
                     "BackToHomeButton", backButtonIsVisible, false);
 

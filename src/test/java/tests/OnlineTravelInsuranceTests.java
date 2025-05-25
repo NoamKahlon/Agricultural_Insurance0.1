@@ -135,7 +135,7 @@ public class OnlineTravelInsuranceTests extends Base {
             flow.navigateToDestinationSelectionStep();
             flow.verifyDestinationSelectionStep();
             onlineTravelInsurancePage.clickEuropeCheckBox();
-            onlineTravelInsurancePage.clickcontinueToNextStepButton();
+            onlineTravelInsurancePage.clickContinueToNextStepButton();
 
             boolean isStartVisible = onlineTravelInsurancePage.verifyStartDateFieldDisplayed();
             loggerUtils.log(isStartVisible ? "✅ Start date field is visible" : "❌ Start date field is NOT visible",

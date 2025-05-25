@@ -30,7 +30,7 @@ public class SearchDocumentsAndFormsFlow {
         loggerUtils.log(didScroll ? "✅ Scrolled to Documents and Forms section" : "❌ Failed to scroll to Documents and Forms section",
                 "DocumentsSection", didScroll, true);
 
-        searchDocumentsAndFormsPage.ClickDocumentsAndForms();
+        searchDocumentsAndFormsPage.clickDocumentsAndForms();
         loggerUtils.log("✅ Clicked on Documents and Forms", "DocumentsClick", true, true);
 
         searchDocumentsAndFormsPage.selectSubjectCarFromDropDownMenu();
