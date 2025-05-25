@@ -2,23 +2,16 @@ package flows;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import pages.BasePage;
 import pages.OnlineTravelInsurancePage;
-import pages.SearchDocumentsAndFormsPage;
 import utils.LoggerUtils;
 import utils.OnlineTravelInsuranceData;
-import utils.OnlineTravelInsuranceData;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static utils.OnlineTravelInsuranceData.DID_YOU_PURCHASE_INSURANCE_TEXT;
-
 public class OnlineTravelInsuranceFlow {
-
 
     WebDriver driver;
     BasePage basePage;
@@ -35,6 +28,7 @@ public class OnlineTravelInsuranceFlow {
 
 
     public void initTravelFlow() throws Exception {
+
         onlineTravelInsurancePage.scrollToTravelInsuranceButton();
         loggerUtils.log("✅ Scrolled to Travel Insurance section", "ScrollToTravel", true, false);
 
@@ -44,11 +38,9 @@ public class OnlineTravelInsuranceFlow {
         basePage.switchToNewTab();
 
         basePage.waitForElementToAppear(By.className("imageTitle"));
-        //basePage.waitForPageToLoad();
 
 
         String expectedTitle = OnlineTravelInsuranceData.EXPECTED_TRAVEL_INSURANCE_PAGE_TITLE;
-
         String actualTitle = basePage.getTitle();
 
         boolean titleOk = actualTitle.equals(expectedTitle);
@@ -62,7 +54,7 @@ public class OnlineTravelInsuranceFlow {
     public void continueToNextQuestion() throws Exception {
         onlineTravelInsurancePage.scrollToLetsContinueButton();
         onlineTravelInsurancePage.clickOnLetsContinueButton();
-        Thread.sleep(600);
+        Thread.sleep(200);
     }
 
 
@@ -77,8 +69,9 @@ public class OnlineTravelInsuranceFlow {
 
 
     public void VerifyInsurancePurchasedQuestion() throws Exception {
+
         String question = onlineTravelInsurancePage.getPreviousInsuranceQuestionText();
-        boolean questionOk = question.contains(DID_YOU_PURCHASE_INSURANCE_TEXT);
+        boolean questionOk = question.contains(utils.OnlineTravelInsuranceData.DID_YOU_PURCHASE_INSURANCE_TEXT);
         loggerUtils.log(questionOk ? "✅ Found question: " + question : "❌ Wrong question text: " + question, "", questionOk, false);
 
 
@@ -93,7 +86,6 @@ public class OnlineTravelInsuranceFlow {
 
 
     public void verifyPassengersFromIsraelQuestionStep() throws Exception {
-        //onlineTravelInsurancePage.clickFirstTimeOptionButton();
 
         String question = onlineTravelInsurancePage.getPassengersFromIsraelQuestionText();
         boolean questionOk = question.contains("יוצאים מישראל");
@@ -129,13 +121,12 @@ public class OnlineTravelInsuranceFlow {
 
 
     public void verifyDestinationOptionsTexts() {
-        List<String> expectedDestinations = OnlineTravelInsuranceData.EXPECTED_DESTINATIONS;
 
+        List<String> expectedDestinations = OnlineTravelInsuranceData.EXPECTED_DESTINATIONS;
         List<String> actualDestinations = onlineTravelInsurancePage.getDestinationTextElements()
                 .stream()
                 .map(e -> cleanText(e.getText()))
                 .collect(Collectors.toList());
-
 
         Set<String> expectedSet = new HashSet<>(expectedDestinations);
         Set<String> actualSet = new HashSet<>(actualDestinations);
@@ -158,38 +149,31 @@ public class OnlineTravelInsuranceFlow {
 
     String cleanText(String text) {
         return text
-                .replaceAll("\\p{C}", "")        // מסיר תווים לא-מודפסים (invisible unicode chars)
-                .replaceAll("\\s+", " ")         // מאחד רווחים
-                .trim();                         // מסיר רווחים מהקצוות
+                .replaceAll("\\p{C}", "")
+                .replaceAll("\\s+", " ")
+                .trim();
     }
 
 
 
     public void verifyDestinationSelectionStep() {
-        // 1. לחיצה על כן
+
         onlineTravelInsurancePage.clickPassengersFromIsraelYesOption();
         loggerUtils.log("✅ Clicked on 'Yes' all passengers from Israel", "ClickedYesPassengers", true, true);
 
-        // 2. כותרת "לאן נוסעים?"
         boolean titleDisplayed = onlineTravelInsurancePage.iswhereAreYouGoingTitleDisplayed();
         loggerUtils.log(titleDisplayed ? "✅ 'Where are you going?' title is displayed" : "❌ 'Where are you going?' title is NOT displayed", "", titleDisplayed, false);
 
-        // 3. בדיקת אופציות
-        verifyDestinationOptionsTexts(); // מניח שכבר קיים
+        verifyDestinationOptionsTexts();
 
-        // 4. Tooltip
         boolean tooltipVisible = onlineTravelInsurancePage.isTooltipIconVisible();
         loggerUtils.log(tooltipVisible ? "✅ Tooltip icon is visible" : "❌ Tooltip icon is missing", "", tooltipVisible, false);
 
-        // 5. כפתור חזור
         boolean backButtonVisible = onlineTravelInsurancePage.isBackButtonVisible();
         loggerUtils.log(backButtonVisible ? "✅ 'Back' button is visible" : "❌ 'Back' button is missing", "", backButtonVisible, false);
 
-        // 6. כפתור המשך
         boolean continueButtonVisible = onlineTravelInsurancePage.isContinueButtonVisible();
         loggerUtils.log(continueButtonVisible ? "✅ 'Continue' button is visible" : "❌ 'Continue' button is missing", "", continueButtonVisible, false);
-
-        // 7. אימות שם השלב
 
     }
 

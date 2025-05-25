@@ -109,7 +109,6 @@ public class OnlineTravelInsurancePage {
         this.basePage = basePage;
     }
 
-
     private final By travelInsuranceButton = By.id("abroadplus");
     private final By letsContinueButton = By.cssSelector("button.procceed");
     private final By quoteIntroBlock = By.xpath("//div[contains(text(),'קיבלת הנחה בלעדית לרכישה און ליין')]");
@@ -127,131 +126,102 @@ public class OnlineTravelInsurancePage {
     private final By idField = By.id("id");
     private final By happyToSeeYouMesseage = By.xpath("//*[contains(text(),'שמחים לראותך שוב!')]");
     private final By whereAreYouGoingTitle = By.cssSelector("h1.title");
-    //private final By DestinationTextElements = By.className("textForPickBoxLabelMobile");
     private final By DestinationTextElements = By.xpath("//*[contains(@class,'textForPickBoxLabelMobile')]");
     private final By TooltipIcon = By.cssSelector("svg.toolTipPic");
-    //private final By backButton = By.cssSelector("div[data-f='back']");
-//    private final By previousStepButton = By.className("sc-papXJ iGkwwW goback");
-//    private final By NextStepButton = By.cssSelector("sc-papXJ jyxUhb procceed");
     private final By previousStepButton = By.cssSelector(".sc-papXJ.iGkwwW.goback");
     private final By NextStepButton = By.cssSelector(".sc-papXJ.jyxUhb.procceed");
-
-   // private final By continueToNextStepButton = By.cssSelector("div[data-f='continue']");
     private final By europeCheckBox = By.id("Europe");
-    public By startDateField = By.id("startDate");
-    public By endDateField = By.id("endDate");
+    private final By startDateField = By.id("startDate");
+    private final By endDateField = By.id("endDate");
 
 
-    public void scrollToTravelInsuranceButton() throws Exception {
-        basePage.scrollToElementForce(travelInsuranceButton);
-    }
+    public void scrollToTravelInsuranceButton() throws Exception {basePage.scrollToElementForce(travelInsuranceButton);}
 
     public void clickOnOnlineTravelInsuranceButton() {
-        basePage.click(travelInsuranceButton);
+        basePage.click(travelInsuranceButton,true);
     }
 
-    public void clickOnContinueButton() {
-        basePage.forceClick(letsContinueButton);
-    }
-
-    public void scrollToLetsContinueButton() throws Exception {
-        basePage.scrollToElementSafe(letsContinueButton);
-    }
+    public void scrollToLetsContinueButton() throws Exception {basePage.scrollToElementSafe(letsContinueButton);}
 
     public void clickOnLetsContinueButton() {
-        basePage.forceClick(letsContinueButton);
+        basePage.forceClick(letsContinueButton,true);
     }
 
     public boolean isQuoteIntroSectionVisible() {
-        return basePage.isDisplayedSafe(quoteIntroBlock);
+        return basePage.isDisplayed(quoteIntroBlock,false);
     }
 
     public String getPreviousInsuranceQuestionText() {
-        return basePage.getTextSafe(previousInsuranceQuestion);
+        return basePage.getText(previousInsuranceQuestion,false);
     }
-
 
     public boolean isFirstTimeOptionDisplayed() {
-        return basePage.isDisplayedSafe(firstTimeOptionButton);
+        return basePage.isDisplayed(firstTimeOptionButton,false);
     }
 
-    public boolean isAlreadyPurchasedOptionDisplayed() {
-        return basePage.isDisplayedSafe(alreadyPurchasedOptionButton);
-    }
+    public boolean isAlreadyPurchasedOptionDisplayed() {return basePage.isDisplayed(alreadyPurchasedOptionButton,false);}
 
     public String getPassengersFromIsraelQuestionText() {
-        return basePage.getTextSafe(passengersFromIsraelQuestion);
+        return basePage.getText(passengersFromIsraelQuestion,false);
     }
 
     public boolean isPassengersFromIsraelYesDisplayed() {
-        return basePage.isDisplayedSafe(passengersFromIsraelYes);
+        return basePage.isDisplayed(passengersFromIsraelYes,false);
     }
 
-    public boolean isPassengersFromIsraelNoDisplayed() {
-        return basePage.isDisplayedSafe(passengersFromIsraelNo);
-    }
+    public boolean isPassengersFromIsraelNoDisplayed() {return basePage.isDisplayed(passengersFromIsraelNo,false);}
 
     public void clickFirstTimeOptionButton() {
-        basePage.click(firstTimeOptionButton);
+        basePage.click(firstTimeOptionButton,true);
     }
 
     public void clickAlreadyPurchasedOptionButton() {
-        basePage.click(alreadyPurchasedOptionButton);
+        basePage.click(alreadyPurchasedOptionButton,true);
     }
 
     public void clickPassengersFromIsraelYesOption() {
-        basePage.click(yesOption);
+        basePage.click(yesOption,true);
     }
 
-    public void clickPassengersFromIsraelNoOption() {
-        basePage.click(noOption);
-    }
+    public void clickPassengersFromIsraelNoOption() { basePage.click(noOption,true);}
 
     public boolean isStopProcessErrorDisplayed() {
-        return basePage.isDisplayedSafe(purchaseBlockedTitle);
+        return basePage.isDisplayed(purchaseBlockedTitle,false);
     }
 
     public boolean isBackToHomeButtonDisplayed() {
-        return basePage.isDisplayedSafe(backToHomeButton);
+        return basePage.isDisplayed(backToHomeButton,false);
     }
 
     public String getHappyToSeeYouAgainText() {
-        return basePage.getTextSafe(happyToSeeYouMesseage);
+        return basePage.getText(happyToSeeYouMesseage,false);
     }
 
     public boolean isPhoneFieldDisplayed() {
-        return basePage.isDisplayedSafe(phoneField);
+        return basePage.isDisplayed(phoneField,false);
     }
 
     public boolean isIdFieldDisplayed() {
-        return basePage.isDisplayedSafe(idField);
+        return basePage.isDisplayed(idField,false);
     }
 
     public boolean iswhereAreYouGoingTitleDisplayed() {
-        return basePage.isDisplayedSafe(whereAreYouGoingTitle);
+        return basePage.isDisplayed(whereAreYouGoingTitle,false);
     }
 
-    public List<WebElement> getDestinationTextElements() {
-        //basePage.waitForNumberOfElements(DestinationTextElements, 6); // ⬅ מחכה ל-6
-        return basePage.getElements(DestinationTextElements);
-    }
-
+    public List<WebElement> getDestinationTextElements() {return basePage.getElements(DestinationTextElements);}
 
     public boolean isTooltipIconVisible() {
-        return basePage.isDisplayedSafe(TooltipIcon);
+        return basePage.isDisplayed(TooltipIcon,false);
     }
-
 
     public boolean isBackButtonVisible() {
-        return basePage.isDisplayedSafe(previousStepButton);
+        return basePage.isDisplayed(previousStepButton,false);
     }
-
 
     public boolean isContinueButtonVisible() {
-        return basePage.isDisplayedSafe(NextStepButton);
+        return basePage.isDisplayed(NextStepButton,false);
     }
-
-
 
     public String verifyCurrentAndPreviousStepsByColor() {
         List<WebElement> steps = basePage.getElements(By.cssSelector("div.step"));
@@ -294,26 +264,16 @@ public class OnlineTravelInsurancePage {
         return stepsSummary.toString();
     }
 
+    public void clickcontinueToNextStepButton() {basePage.forceClick(NextStepButton,true);}
 
-
-
-    public void clickcontinueToNextStepButton() {
-        basePage.forceClick(NextStepButton);
-    }
-
-
-    public void clickEuropeCheckBox() {
-        basePage.clickCheckbox(europeCheckBox);
-    }
-
-
+    public void clickEuropeCheckBox() {basePage.clickCheckbox(europeCheckBox);}
 
     public boolean verifyStartDateFieldDisplayed(){
-        return basePage.isDisplayed(startDateField);
+        return basePage.isDisplayed(startDateField,false);
     }
 
     public boolean verifyEndDateFieldDisplayed(){
-        return basePage.isDisplayed(endDateField);
+        return basePage.isDisplayed(endDateField,false);
     }
 
 }

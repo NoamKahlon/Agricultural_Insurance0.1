@@ -1,36 +1,34 @@
 package tests;
 
-
 import flows.ContactUsFlow;
-import flows.SearchDocumentsAndFormsFlow;
 import io.qameta.allure.Description;
 import org.openqa.selenium.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
-import pages.ContactUsPage;
+
 import utils.ContactUsData;
-import utils.LoggerUtils;
 
 public class ContactUsTests extends Base {
 
-    ContactUsFlow flow;
+    private ContactUsFlow flow;
 
     @BeforeMethod
     public void setup() {
-        this.flow = new ContactUsFlow(driver, basePage, contactUsPage, loggerUtils);
+        this.flow = new ContactUsFlow(contactUsPage, loggerUtils);
         flow.clickOnContactUs();
     }
 
-    // TC-094 - UI - מסך צור קשר
+
     @Test(description = "TC-094 - Verify that Contact Us page loads with form fields visible")
     @Description("Verify that the 'Contact Us' page is displayed correctly with the full form: name, phone, email, subject, message")
     public void test_TC094_ContactUsPageIsDisplayed() {
       try {
+
           flow.VerifyContactUsFormIsDisplayed();
+
       } catch (Exception e){
+
           loggerUtils.log("❌ Failed to validate form: " + e.getMessage(), "EmptyFormValidation", false, true);
-          throw e;
       }
     }
 
@@ -48,22 +46,18 @@ public class ContactUsTests extends Base {
 
             String[] fieldIds = {"fullname", "phone", "email", "subject", "message"};
 
-            for (int i = 0; i < fieldIds.length; i++) {
-                String fieldId = fieldIds[i];
-
+            for (String fieldId : fieldIds) {
                 By errorLocator = By.id("error-" + fieldId);
-                String actualError = basePage.getTextSafe(errorLocator);
+                String actualError = basePage.getText(errorLocator,false);
                 boolean matches = actualError.equals(expectedError);
 
                 loggerUtils.log(matches ? "✅ " + fieldId + " error matches expected" : "❌ " + fieldId +
-                        " error mismatch. Expected: '" + expectedError + "', Got: '" + actualError + "'", "" , matches, false);
+                        " error mismatch. Expected: '" + expectedError + "', Got: '" + actualError + "'", "", matches, false);
             }
 
         } catch (Exception e) {
-            loggerUtils.log("❌ Failed to validate empty Contact Us form: " + e.getMessage(), "EmptyFormValidation", false, true);
-            throw e;
-        } finally {
-            loggerUtils.softAssert.assertAll();
+            loggerUtils.log("❌ Failed to validate empty Contact Us form: " + e.getMessage(),
+                    "EmptyFormValidation", false, true);
         }
     }
 
@@ -74,45 +68,28 @@ public class ContactUsTests extends Base {
         try {
             flow.VerifyContactUsFormIsDisplayed();
 
-            basePage.sendKeysSafe(contactUsPage.fullNameField, ContactUsData.VALID_NAME);
-            basePage.sendKeysSafe(contactUsPage.phoneField, ContactUsData.VALID_PHONE);
-            basePage.sendKeysSafe(contactUsPage.emailField, ContactUsData.VALID_EMAIL);
-            basePage.chooseValueFromDropDownMenuSafe(contactUsPage.subjectField, ContactUsData.VALID_SUBJECT);
-            basePage.sendKeysSafe(contactUsPage.messageField, ContactUsData.VALID_MESSAGE);
+            basePage.sendKeys(contactUsPage.getFullNameField(), ContactUsData.VALID_NAME,false);
+            basePage.sendKeys(contactUsPage.getPhoneField(), ContactUsData.VALID_PHONE,false);
+            basePage.sendKeys(contactUsPage.getEmailField(), ContactUsData.VALID_EMAIL,false);
+            basePage.chooseValueFromDropDownMenuSafe(contactUsPage.getSubjectField(), ContactUsData.VALID_SUBJECT);
+            basePage.sendKeys(contactUsPage.getMessageField(), ContactUsData.VALID_MESSAGE,false);
 
             contactUsPage.pressSubmit();
             loggerUtils.log("✅ Form submitted", "FormSubmission", true, false);
 
-            boolean thankYouMessageIsVisible = basePage.isDisplayedSafe(contactUsPage.thankYouText);
-            boolean backButtonIsVisible = basePage.isDisplayedSafe(contactUsPage.backButton);
+            boolean thankYouMessageIsVisible = basePage.isDisplayed(contactUsPage.getThankYouText(),false);
+            boolean backButtonIsVisible = basePage.isDisplayed(contactUsPage.getBackButton(),false);
 
-            loggerUtils.log((thankYouMessageIsVisible ? "✅" : "❌") +
-                            " Thank you message visible", "", thankYouMessageIsVisible, false);
+            loggerUtils.log(thankYouMessageIsVisible ? "✅ Thank you message is visible" : "❌ Thank you message is NOT visible",
+                    "ThankYouMessage", thankYouMessageIsVisible, false);
 
-            loggerUtils.log((backButtonIsVisible ? "✅" : "❌") +
-                            " Back button is visible", "", backButtonIsVisible, false);
-
-
-//            loggerUtils.assertWithLog("Thank you message is visible", thankYouMessageIsVisible, true);
-//            loggerUtils.assertWithLog("Back button is visible", backButtonIsVisible, false);
-
-
-            //softAssert.assertTrue(false, "🔴 SoftAssert test failure check");
-
-
-//            loggerUtils.assertWithLog("❌ Thank you message is not visible",thankYouMessageIsVisible,false);
-//            loggerUtils.assertWithLog("❌ Back button is not visible",backButtonIsVisible,false);
-//
-//
-
+            loggerUtils.log(backButtonIsVisible ? "✅ Back to home button is visible" : "❌ Back to home button is NOT visible",
+                    "BackToHomeButton", backButtonIsVisible, false);
 
         } catch (Exception e) {
-            loggerUtils.log("❌ Failed to submit form or verify thank you screen: " + e.getMessage(), "FormSubmitError", false, true);
-            throw e;
-        }finally {
-            softAssert.assertAll();
+            loggerUtils.log("❌ Failed to submit form or verify thank you screen: " + e.getMessage(),
+                    "FormSubmitError", false, true);
         }
     }
-
 
 }

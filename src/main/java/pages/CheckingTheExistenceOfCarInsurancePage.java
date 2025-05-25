@@ -9,22 +9,16 @@ public class CheckingTheExistenceOfCarInsurancePage {
     private final WebDriver driver;
     private final BasePage basePage;
 
-    // Strings
     private final String license = "23652125";
     private final String notValidlicense = "12345678";
-    private final String dateValue = "04/11/2024"; // בפורמט שה-datepicker מקבל
+    private final String dateValue = "04/11/2024";
 
-    // Locators
     private final By licenseInputField = By.id("license-number");
     private final By IsTheVehicleInsuredButton = By.cssSelector("body > main > section.actions > div.quick__container > ul > li:nth-child(1) > a");
     private final By datePicker = By.id("search-date");
     private final By searchButton = By.id("check-sub");
     private final By successMessage = By.cssSelector(".success-msg.msg-form");
     private final By errorMessage =  By.cssSelector("div.error-msg.msg-form[style*='display: block']");
-
-
-
-    private final By successMessageColor = By.cssSelector(".msg-form.success-msg .flex-cont");
 
 
 
@@ -37,11 +31,11 @@ public class CheckingTheExistenceOfCarInsurancePage {
     }
 
     public void enterLicenseNumber() {
-        basePage.sendKeys(licenseInputField, license);
+        basePage.sendKeys(licenseInputField, license,true);
     }
 
     public void enterInvalidLicenseNumber() {
-        basePage.sendKeys(licenseInputField, notValidlicense);
+        basePage.sendKeys(licenseInputField, notValidlicense,true);
     }
 
     public void enterDate() {
@@ -49,22 +43,22 @@ public class CheckingTheExistenceOfCarInsurancePage {
     }
 
     public void clickSearch() {
-        basePage.click(searchButton);
+        basePage.click(searchButton,true);
     }
 
     public String getSuccessText() {
-        return basePage.getText(successMessage);
+        return basePage.getText(successMessage,true);
     }
 
     public String getErrorText() {
-        return basePage.getText(errorMessage);
+        return basePage.getText(errorMessage,true);
     }
 
     public boolean ScrollToCheckingTheExistenceOfCarInsurance() throws Exception {
        return basePage.scrollToElement(IsTheVehicleInsuredButton);
     }
     public void ClickCheckingTheExistenceOfCarInsurance() throws Exception {
-        basePage.forceClick(IsTheVehicleInsuredButton);
+        basePage.forceClick(IsTheVehicleInsuredButton,true);
     }
 
     public boolean isErrorTextRed() {

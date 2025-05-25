@@ -23,9 +23,6 @@ public class SearchDocumentsAndFormsPage {
     private final By freeTextField = By.id("opentext");
     private final By headers = By.cssSelector("div.table__item");
 
-    //get row data
-   // private final By b = By.cssSelector("span.table__text");
-
 
     public SearchDocumentsAndFormsPage(BasePage basePage) {
         this.basePage = basePage;
@@ -33,7 +30,7 @@ public class SearchDocumentsAndFormsPage {
 
     public boolean scrollToDocumentsAndForms() throws Exception {return basePage.scrollToElement(documentsAndFormsBtn);}
 
-    public void ClickDocumentsAndForms() throws Exception {basePage.forceClick(documentsAndFormsBtn);}
+    public void ClickDocumentsAndForms() throws Exception {basePage.forceClick(documentsAndFormsBtn,true);}
 
     public void selectSubjectCarFromDropDownMenu() {basePage.chooseValueFromDropDownMenu(primary, 1);}
 
@@ -42,14 +39,14 @@ public class SearchDocumentsAndFormsPage {
     }
 
     public void clickSearch() {
-        basePage.click(searchButton);
+        basePage.click(searchButton,true);
     }
 
     public void clickClear() {
-        basePage.click(resetButtonLoc);
+        basePage.click(resetButtonLoc,true);
     }
 
-    public void FillTextField() {basePage.sendKeys(freeTextField, SearchDocumentsAndFormsData.insurance);}
+    public void FillTextField() {basePage.sendKeys(freeTextField, SearchDocumentsAndFormsData.insurance,true);}
 
     public List<String> getWebElementListTexts(List<WebElement> webElementList) {
         return webElementList.stream()
@@ -57,18 +54,11 @@ public class SearchDocumentsAndFormsPage {
                 .collect(Collectors.toList());
     }
 
-    public List<WebElement> getSearchResultDocument() {
-        List<WebElement> results = new ArrayList<>();
-        try {
-            results = basePage.getElements(listOfDocumentsSearched);
-        } catch (Exception e) {}
-        return results;
-    }
+    public List<WebElement> getSearchResultDocument() {return basePage.getElementsSafe(listOfDocumentsSearched);}
 
     public List<WebElement> getTableSearchResult() {
         List<WebElement> SearchResultDocument = getSearchResultDocument();
 
-        // 1 is header
         if (SearchResultDocument.size() <= 1) {
             return Collections.emptyList();
         }
