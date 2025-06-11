@@ -7,8 +7,7 @@ import org.openqa.selenium.WebElement;
 public class CheckingTheExistenceOfCarInsurancePage {
 
 
-    // //////////// DRIVER + BASE ////////////
-    private final WebDriver driver;
+    // //////////// BASE ////////////
     private final BasePage basePage;
 
     // //////////// TEST DATA ////////////
@@ -29,8 +28,7 @@ public class CheckingTheExistenceOfCarInsurancePage {
     private final By errorMessage = By.cssSelector("div.error-msg.msg-form[style*='display: block']");
 
 
-    public CheckingTheExistenceOfCarInsurancePage(WebDriver driver, BasePage basePage) {
-        this.driver = driver;
+    public CheckingTheExistenceOfCarInsurancePage(BasePage basePage) {
         this.basePage = basePage;
     }
 
@@ -73,21 +71,48 @@ public class CheckingTheExistenceOfCarInsurancePage {
     //////////// VALIDATIONS /////////////
 
     public boolean isErrorTextRed() {
-        WebElement result = driver.findElement(errorMessage);
-        String color = result.getCssValue("color");
-        return color.contains("rgba(255, 0, 0, 1)") || color.toLowerCase().contains("red");
+        WebElement result = basePage.getElement(errorMessage);
+        String color = result.getCssValue("color").trim();
+
+        System.out.println("Error message color: " + color); // DEBUG LOG
+
+        try {
+            String[] parts = color
+                    .replace("rgba(", "")
+                    .replace("rgb(", "")
+                    .replace(")", "")
+                    .split(",");
+
+            int r = Integer.parseInt(parts[0].trim());
+            int g = Integer.parseInt(parts[1].trim());
+            int b = Integer.parseInt(parts[2].trim());
+
+            return r == 255 && g == 0 && b == 0; // צבע אדום מלא
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean isSuccessTextGreen() {
         WebElement result = basePage.getElement(successMessage);
-        String color = result.getCssValue("color").trim(); // rgba(96, 187, 112, 1)
+        String color = result.getCssValue("color").trim(); // תומך גם ב־rgba וגם ב־rgb
 
-        String[] rgba = color.replace("rgba(", "").replace(")", "").split(",");
-        int r = Integer.parseInt(rgba[0].trim());
-        int g = Integer.parseInt(rgba[1].trim());
-        int b = Integer.parseInt(rgba[2].trim());
+        try {
+            String[] parts = color
+                    .replace("rgba(", "")
+                    .replace("rgb(", "")
+                    .replace(")", "")
+                    .split(",");
 
-        return r == 96 && g == 187 && b == 112;
+            int r = Integer.parseInt(parts[0].trim());
+            int g = Integer.parseInt(parts[1].trim());
+            int b = Integer.parseInt(parts[2].trim());
+
+            return r == 96 && g == 187 && b == 112;
+        } catch (Exception e) {
+            return false;
+        }
     }
+
 
 }

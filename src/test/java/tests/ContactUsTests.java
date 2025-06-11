@@ -2,11 +2,8 @@ package tests;
 
 import flows.ContactUsFlow;
 import io.qameta.allure.Description;
-import org.openqa.selenium.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import utils.ContactUsData;
 
 public class ContactUsTests extends Base {
 
@@ -14,85 +11,40 @@ public class ContactUsTests extends Base {
 
     @BeforeMethod
     public void setup() {
-        this.flow = new ContactUsFlow(contactUsPage, loggerUtils,basePage);
+        this.flow = new ContactUsFlow(loggerUtils, basePage);
         flow.clickOnContactUs();
     }
 
-
     @Test(description = "TC-094 - Verify that Contact Us page loads with form fields visible")
-    @Description("Verify that the 'Contact Us' page is displayed correctly with the full form: name, phone, email, subject, message")
     public void test_TC094_ContactUsPageIsDisplayed() {
-      try {
-
-          flow.VerifyContactUsFormIsDisplayed();
-
-      } catch (Exception e){
-
-          loggerUtils.log("❌ Failed to validate form: " + e.getMessage(), "EmptyFormValidation", false, true);
-      }
-    }
-
-
-    @Test(description = "TC-095 - Verify validation messages appear when Contact Us form is submitted empty")
-    @Description("Submit Contact Us form with empty fields and validate red error messages appear under all required fields")
-    public void test_TC095_ContactFormValidationOnEmptySubmit() throws InterruptedException {
         try {
-            flow.VerifyContactUsFormIsDisplayed();
-
-            contactUsPage.pressSubmit();
-            loggerUtils.log("✅ Submitted empty form", "EmptySubmit", true, true);
-
-            String expectedError = ContactUsData.EXPECTED_EMPTY_FIELD_ERROR;
-
-            String[] fieldIds = {"fullname", "phone", "email", "subject", "message"};
-
-            for (String fieldId : fieldIds) {
-                By errorLocator = By.id("error-" + fieldId);
-                String actualError = basePage.getText(errorLocator);
-                boolean matches = actualError.equals(expectedError);
-
-                loggerUtils.log(matches ? "✅ " + fieldId + " error matches expected" : "❌ " + fieldId +
-                        " error mismatch. Expected: '" + expectedError + "', Got: '" + actualError + "'", "", matches, false);
-            }
-
+            flow.verifyContactUsFormIsDisplayed();
         } catch (Exception e) {
-            loggerUtils.log("❌ Failed to validate empty Contact Us form: " + e.getMessage(),
-                    "EmptyFormValidation", false, true);
+            loggerUtils.log("❌ Failed to validate form: " + e.getMessage(), "FormVisibility", false);
         }
     }
 
+    @Test(description = "TC-095 - Verify validation messages appear when Contact Us form is submitted empty")
+    public void test_TC095_ContactFormValidationOnEmptySubmit() {
+        try {
+            flow.verifyContactUsFormIsDisplayed();
+            flow.submitEmptyFormAndVerifyValidationMessages();
+        } catch (Exception e) {
+            loggerUtils.log("❌ Failed to validate empty Contact Us form: " + e.getMessage(),
+                    "EmptyFormValidation", false);
+        }
+    }
 
     @Test(description = "TC-096 - Verify successful submission of Contact Us form and display of thank you screen")
     @Description("Submit form with valid details and verify thank you message and Back to Home button are displayed")
     public void test_TC096_SuccessfulContactFormSubmission() throws InterruptedException {
         try {
-
-            // להעביר לflow
-//            basePage.sendKeys(contactUsPage.getFullNameField(), ContactUsData.VALID_NAME);
-//            basePage.sendKeys(contactUsPage.getPhoneField(), ContactUsData.VALID_PHONE);
-//            basePage.sendKeys(contactUsPage.getEmailField(), ContactUsData.VALID_EMAIL);
-//            basePage.chooseValueFromDropDownMenuSafe(contactUsPage.getSubjectField(), ContactUsData.VALID_SUBJECT);
-//            basePage.sendKeys(contactUsPage.getMessageField(), ContactUsData.VALID_MESSAGE);
-//
-//            contactUsPage.pressSubmit();
-//            loggerUtils.log("✅ Form submitted", "FormSubmission", true, false);
-
-            flow.VerifyContactUsFormIsDisplayed();
-
+            flow.verifyContactUsFormIsDisplayed();
             flow.fillAndSubmitContactForm();
-
-            boolean thankYouMessageIsVisible = contactUsPage.isThankYouMessageVisible();
-            loggerUtils.log(thankYouMessageIsVisible ? "✅ Thank you message is visible" : "❌ Thank you message is NOT visible",
-                    "ThankYouMessage", thankYouMessageIsVisible, false);
-
-            boolean backButtonIsVisible = contactUsPage.isBackButtonVisible();
-            loggerUtils.log(backButtonIsVisible ? "✅ Back to home button is visible" : "❌ Back to home button is NOT visible",
-                    "BackToHomeButton", backButtonIsVisible, false);
-
+            flow.verifyThankYouScreenDisplayed();
         } catch (Exception e) {
             loggerUtils.log("❌ Failed to submit form or verify thank you screen: " + e.getMessage(),
-                    "FormSubmitError", false, true);
+                    "FormSubmitError", false);
         }
     }
-
 }

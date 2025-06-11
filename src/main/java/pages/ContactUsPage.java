@@ -45,53 +45,6 @@ public class ContactUsPage {
 
     //////////// SET /////////////
 
-    public void enterFullName(String fullName) {
-        basePage.sendKeys(fullNameField, fullName);
-    }
-
-    public void enterPhone(String phone) {
-        basePage.sendKeys(phoneField, phone);
-    }
-
-    public void enterEmail(String email) {
-        basePage.sendKeys(emailField, email);
-    }
-
-    public void enterSubject(String subject) {
-        basePage.chooseValueFromDropDownMenuSafe(subjectField, subject);
-    }
-
-    public void enterMessage(String message) {
-        basePage.sendKeys(messageField, message);
-    }
-
-    public void fillForm() {
-        enterFullName();
-        enterPhone();
-        enterEmail();
-        enterSubject();
-        enterMessage();
-    }
-
-
-    //////////// GET /////////////
-
-    public String getTitle() {
-        return basePage.getTitle();
-    }
-
-    public String getSalesCenterTitleText() {
-        return basePage.getText(salesCenterTitle);
-    }
-
-    public String getSupportCenterTitleText() {
-        return basePage.getText(supportCenterTitle);
-    }
-
-    public String getServiceCenterTitleText() {
-        return basePage.getText(serviceCenterTitle);
-    }
-
     public void enterFullName() {
         basePage.sendKeys(fullNameField, ContactUsData.VALID_NAME);
     }
@@ -110,6 +63,24 @@ public class ContactUsPage {
 
     public void enterMessage() {
         basePage.sendKeys(messageField, ContactUsData.VALID_MESSAGE);
+    }
+
+    //////////// GET /////////////
+
+    public String getTitle() {
+        return basePage.getTitle();
+    }
+
+    public String getSalesCenterTitleText() {
+        return basePage.getText(salesCenterTitle);
+    }
+
+    public String getSupportCenterTitleText() {
+        return basePage.getText(supportCenterTitle);
+    }
+
+    public String getServiceCenterTitleText() {
+        return basePage.getText(serviceCenterTitle);
     }
 
     //////////// VALIDATION /////////////
@@ -141,25 +112,5 @@ public class ContactUsPage {
 
     public boolean isMessageFieldDisplayed() {
         return basePage.isDisplayed(messageField);
-    }
-
-    public boolean isSalesCenterTitleDisplayed() {
-        return basePage.isDisplayed(salesCenterTitle);
-    }
-
-    public boolean isSupportCenterTitleDisplayed() {
-        return basePage.isDisplayed(supportCenterTitle);
-    }
-
-    public boolean isServiceCenterTitleDisplayed() {
-        return basePage.isDisplayed(serviceCenterTitle);
-    }
-
-    public boolean isThankYouTextDisplayed() {
-        return basePage.isDisplayed(thankYouText);
-    }
-
-    public boolean isBackButtonDisplayed() {
-        return basePage.isDisplayed(backToHomeButton);
     }
 }
