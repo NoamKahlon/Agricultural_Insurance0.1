@@ -54,9 +54,9 @@ Project0.2/
 - Jenkins installed (optional for CI/CD)
 
 
-### 🧪 Run Tests
+### 🧪 Run Tests and Genrate Allure Report
 ```bash
-mvn clean test
+mvn clean test ; mvn allure:report
 ```
 
 ### 📊 Generate Allure Report
